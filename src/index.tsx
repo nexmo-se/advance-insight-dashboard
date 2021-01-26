@@ -1,12 +1,25 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+
 import './index.css';
+import "@vonagevolta/volta2/dist/css/volta.min.css";
+
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+import { ThemeProvider, createMuiTheme } from "@material-ui/core";
+import { BrowserRouter } from "react-router-dom";
+import { SessionProvider } from "components/SessionProvider"
+
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <BrowserRouter>
+      <SessionProvider>
+        <ThemeProvider theme={createMuiTheme()}>
+          <App />
+        </ThemeProvider>
+      </SessionProvider>
+    </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')
 );
