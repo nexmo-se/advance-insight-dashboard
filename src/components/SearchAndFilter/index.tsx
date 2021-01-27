@@ -1,37 +1,36 @@
 import { DateTime } from "luxon";
 import { SearchContext } from "./contexts/search";
+import { SaveClickEvent } from "./types";
 
 import { useState } from "react";
 import { useSearch } from "./hooks/search";
 
-import Card from "components/Card";
+import SearchCard from "./components/SearchCard";
 
 interface ISearchAndFilter {
   children: any;
 }
 
 function SearchAndFilter({ children }: ISearchAndFilter) {
-  const [sessionIds, setSessionIds] = useState<string[]>([]);
-  const [startTime, setStartTime] = useState<DateTime | undefined>();
-  const [endTime, setEndTime] = useState<DateTime | undefined>();
+  const [selectedSessionIds, setSelectedSessionIds] = useState<string[]>([]);
+  const [selectedStartTime, setSelectedStartTime] = useState<DateTime>(DateTime.local().minus({ day: 7 }));
+  const [selectedEndTime, setSelectedEndTime] = useState<DateTime>(DateTime.local());
 
-
+  function handleSaveClick({ sessionIds, startTime, endTime }: SaveClickEvent) {
+    setSelectedSessionIds(sessionIds);
+    setSelectedStartTime(startTime);
+    setSelectedEndTime(endTime);
+  }
 
   return (
     <SearchContext.Provider
       value={{
-        sessionIds,
-        startTime,
-        endTime
+        sessionIds: selectedSessionIds,
+        startTime: selectedStartTime,
+        endTime: selectedEndTime
       }}
     >
-      <Card>
-        <Card.Header>
-          <p>
-            <b>SEARCH AND FILTERS</b>
-          </p>
-        </Card.Header>
-      </Card>
+      <SearchCard onSaveClick={handleSaveClick} />
       {children}
     </SearchContext.Provider>
   )
