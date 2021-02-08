@@ -27,7 +27,8 @@ function SearchAndFilter({ children }: ISearchAndFilter) {
       value={{
         sessionIds: selectedSessionIds,
         startTime: selectedStartTime,
-        endTime: selectedEndTime
+        endTime: selectedEndTime,
+        setSessionIds: setSelectedSessionIds
       }}
     >
       <SearchCard onSaveClick={handleSaveClick} />
