@@ -11,14 +11,24 @@ import { ThemeProvider, createMuiTheme } from "@material-ui/core";
 import { BrowserRouter } from "react-router-dom";
 import { SessionProvider } from "components/SessionProvider"
 
+// Add Apollo Client
+import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+
+const client = new ApolloClient({
+  uri: process.env.VONAGE_VIDEO_API_INSIGHTS_URL,
+  cache: new InMemoryCache()
+});
+
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
+    <ApolloProvider client={client}>
       <SessionProvider>
         <ThemeProvider theme={createMuiTheme()}>
           <App />
         </ThemeProvider>
       </SessionProvider>
+      </ApolloProvider>
     </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')
