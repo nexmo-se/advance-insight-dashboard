@@ -19,6 +19,7 @@
     "graphql": "^15.5.0",
     "luxon": "^1.25.0",
     "moment": "^2.29.1",
+    "opentok-jwt": "^0.1.4",
     "react": "^17.0.1",
     "react-datepicker": "^3.4.1",
     "react-dom": "^17.0.1",
