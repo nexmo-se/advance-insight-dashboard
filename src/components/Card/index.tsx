@@ -2,6 +2,7 @@ import clsx from "clsx";
 
 import Header from "./components/Header";
 import Content from "./components/Content";
+import Footer from "./components/Footer";
 import { Box } from "@material-ui/core";
 
 interface ICard {
@@ -23,4 +24,5 @@ function Card({ children, className = []}: ICard) {
 
 Card.Header = Header;
 Card.Content = Content;
+Card.Footer = Footer;
 export default Card;
