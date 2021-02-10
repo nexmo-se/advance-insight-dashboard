@@ -28,19 +28,6 @@ export function SessionProvider({ children }: ISessionProvider) {
     push("/login");
   }
 
-  /* function generateJwt(): OpentokJWT | undefined {
-    if (apiKey && apiSecret) {
-      const currentTime = DateTime.utc().toMillis() / 1000;
-      const expires = currentTime + 300; // 5 minutes expirity
-      const accountJwt = generateToken(apiKey, apiSecret, "account",  expires);
-      const projectJwt = generateToken(apiKey, apiSecret, "project", expires);
-      return {
-        account: accountJwt,
-        project: projectJwt
-      }
-    } else return undefined;
-  } */
-
   useEffect(
     () => {
       const apiKey = sessionStorage.getItem("api_key");
