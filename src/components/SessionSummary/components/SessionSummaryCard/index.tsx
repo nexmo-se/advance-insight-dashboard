@@ -34,6 +34,7 @@ export function SessionSummaryQuery({ apiKey, sessionIds }: {apiKey: string, ses
   const { loading, error, data } = useQuery(GET_SESSION_SUMMARY_DATA, {
     variables: { projectId: apiKey, sessionId: sessionIds },
   });
+  console.log("[SessionSummaryQuery]", sessionIds)
   //  const { loading, error, data } = useQuery(GET_SESSION_SUMMARY_DATA);
   console.log("data", data);
   console.log("error", error);

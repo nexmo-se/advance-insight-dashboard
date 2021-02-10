@@ -68,7 +68,6 @@ const httpLink = new HttpLink({
 const authMiddleware = (jwt: any) =>
   new ApolloLink((operation: any, forward: any) => {
     // add the authorization to the headers
-    console.log("authMIddl", jwt)
     if (jwt) {
       operation.setContext({
         headers: {
