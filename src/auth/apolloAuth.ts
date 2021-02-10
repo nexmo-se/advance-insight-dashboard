@@ -5,6 +5,7 @@ import { onError } from "@apollo/client/link/error";
 const ERROR_NO_AUTH_PROVIDED = 1001;
 
 const onErrorLink = onError(({ graphQLErrors, networkError, operation, forward }) => {
+    console.warn(`[onErrorLink]`);
     if (graphQLErrors) {
       for (let err of graphQLErrors) {
         if (err.extensions)  {
