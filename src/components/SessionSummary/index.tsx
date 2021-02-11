@@ -1,6 +1,6 @@
 
-import { useSession } from "./../../components/SessionProvider";
-import { useSearch } from "./../../components/SearchAndFilter/hooks/search";
+import { useSession } from "components/SessionProvider";
+import { useSearch } from "components/SearchAndFilter";
 import {SessionSummaryQuery} from './components/SessionSummaryCard'
 
 
