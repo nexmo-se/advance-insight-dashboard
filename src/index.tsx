@@ -1,37 +1,38 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from "react";
+import ReactDOM from "react-dom";
 
-import './index.css';
+import "./index.css";
 import "@vonagevolta/volta2/dist/css/volta.min.css";
 
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
 
 import { ThemeProvider, createMuiTheme } from "@material-ui/core";
 import { BrowserRouter } from "react-router-dom";
-import { SessionProvider } from "components/SessionProvider"
+import { SessionProvider } from "components/SessionProvider";
 
 // Add Apollo Client
-import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+// import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 
-const client = new ApolloClient({
+/* const client = new ApolloClient({
   uri: process.env.VONAGE_VIDEO_API_INSIGHTS_URL,
-  cache: new InMemoryCache()
-});
+  cache: new InMemoryCache(),
+  headers: {
+    
+  }
+}); */
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
-    <ApolloProvider client={client}>
       <SessionProvider>
-        <ThemeProvider theme={createMuiTheme()}>
-          <App />
-        </ThemeProvider>
+          <ThemeProvider theme={createMuiTheme()}>
+            <App />
+          </ThemeProvider>
       </SessionProvider>
-      </ApolloProvider>
     </BrowserRouter>
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById("root")
 );
 
 // If you want to start measuring performance in your app, pass a function

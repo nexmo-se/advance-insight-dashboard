@@ -1,38 +1,17 @@
-import React from 'react';
-import { useQuery, gql } from '@apollo/client';
-import moment from 'moment'
 
-const getSessionSummaryData = (projectId, sessionId) => gql`
-{
-    project(projectId: ${46843184}) {
-      sessionData {
-        sessions(sessionIds: [${sessionId}]){
-          resources{
-            publisherMinutes,
-            subscriberMinutes,
-            meetings{
-              totalCount,
-              resources{
-                createdAt,
-                publishers {
-                  totalCount
-                },
-                subscribers {
-                  totalCount
-                }
-              }
-            }
-          }
-        }
-      }
-    }
+import { useSession } from "components/SessionProvider";
+import { useSearch } from "components/SearchAndFilter";
+import {SessionSummaryQuery} from './components/SessionSummaryCard'
+
+
+function SessionSummary() {
+  const { apiKey } = useSession();
+  const { sessionIds } = useSearch();
+  if (apiKey && sessionIds && sessionIds.length) {
+    return <SessionSummaryQuery apiKey={apiKey} sessionIds={sessionIds} />
+  } else {
+    return <h1>No session selected</h1>;
   }
-`;
-
-function SessionSummary({sessionId}){
-    // this function should only display one sessionId at a time.
-    // query for tot pubs and sub minutes 
-
 }
 
-export default SessionSummary
+export default SessionSummary;
