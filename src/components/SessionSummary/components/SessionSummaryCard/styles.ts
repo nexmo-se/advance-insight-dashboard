@@ -10,5 +10,8 @@ export default makeStyles(() => ({
   },
   pubSubMinutesStyle:{
     fontSize:"2rem",
-  }  
+  },
+  table: {
+    minWidth: 650,
+  },
 }));
