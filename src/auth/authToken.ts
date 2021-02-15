@@ -8,6 +8,7 @@ export const generateJwt = (apiKey: string | null, apiSecret: string| null) : {a
       const expires = currentTime + 300; // 5 minutes expirity
       const accountJwt = generateToken(apiKey, apiSecret, "account", expires);
       const projectJwt = generateToken(apiKey, apiSecret, "project", expires);
+      console.log("generateJwt - token created")
       return {
         account: accountJwt,
         project: projectJwt
