@@ -11,7 +11,6 @@ import { Box } from "@material-ui/core";
 function SessionSummary() {
   const { apiKey } = useSession();
   const { sessionIds } = useSearch();
-  console.log("sessionIds", sessionIds)
   return (
     <Card>
       <Card.Header>

@@ -75,18 +75,12 @@ export function SessionSummaryQuery({
     variables: { projectId: apiKey, sessionId: sessionIds },
   });
   const classes = useStyles();
-  console.log("[SessionSummaryQuery]", sessionIds);
-  console.log("data", data);
-  console.log("error", error);
   if (loading) {
     return <p>Loading ...</p>;
   }
   const resources = get(data, "project.sessionData.sessions.resources", []);
-
-  console.log("resources", resources);
   if (resources && resources[0].meetings) {
     let meetings = get(resources[0], "meetings.resources", []);
-    console.log("meetings", meetings);
     let totalConnections = 0;
     let totalPublishers = 0;
     let totalSubscribers = 0;
@@ -106,7 +100,6 @@ export function SessionSummaryQuery({
         )
       );
     }
-    console.log("meetingsData", meetingsData);
     return (
       <>
         <Box display="flex" alignItems="center" justifyContent="space-between">
