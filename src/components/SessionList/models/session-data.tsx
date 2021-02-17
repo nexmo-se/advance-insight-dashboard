@@ -2,9 +2,9 @@ import { DateTime } from "luxon";
 
 interface Constructor {
   id: string;
-  createdAt: DateTime;
+  createdAt?: DateTime;
+  destroyedAt?: DateTime;
   connections: number;
-  maxPublishers: number;
   publishedMinutes: number;
   subscribedMinutes: number;
   quality: number;
@@ -12,9 +12,9 @@ interface Constructor {
 
 class SessionData {
   id: string;
-  createdAt: DateTime;
+  createdAt?: DateTime;
+  destroyedAt?: DateTime;
   connections: number;
-  maxPublishers: number;
   publishedMinutes: number;
   subscribedMinutes: number;
   quality: number;
@@ -23,7 +23,7 @@ class SessionData {
     this.id = args.id;
     this.createdAt = args.createdAt;
     this.connections = args.connections;
-    this.maxPublishers = args.maxPublishers;
+    this.destroyedAt = args.destroyedAt;
     this.publishedMinutes = Math.round(args.publishedMinutes);
     this.subscribedMinutes = Math.round(args.subscribedMinutes);
     this.quality = args.quality;

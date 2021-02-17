@@ -16,5 +16,9 @@ export default makeStyles(() => ({
       top: 0,
       background: "white"
     }
+  },
+  clickableText: {
+    color: "#b779ff",
+    cursor: "pointer"
   }
 }), { index: 1 });
