@@ -38,7 +38,7 @@ export function SessionProvider({ children }: ISessionProvider) {
         setApiSecret(apiSecret);
       } else push("/login");
     },
-    []
+    [push]
   )
   
   return (
