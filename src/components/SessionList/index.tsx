@@ -1,8 +1,15 @@
 import IconPath from "@vonagevolta/volta2/dist/symbol/volta-icons.svg";
 
 import clsx from "clsx";
-import useStyles from "./styles";
+import lodash from "lodash";
+import SessionData from "./models/session-data";
+import SessionService from "./services/session";
 import { DateTime } from "luxon";
+
+import useStyles from "./styles";
+import { useSession } from "components/SessionProvider";
+import { useSearch } from "components/SearchAndFilter";
+import { useState, useEffect } from "react";
 
 import Card from "components/Card";
 import { Box } from "@material-ui/core";
@@ -17,10 +24,48 @@ const sessionData = {
   quality: 4.2
 };
 
-const data = [sessionData, sessionData, sessionData, sessionData, sessionData, sessionData, sessionData, sessionData, sessionData, sessionData, sessionData, sessionData, sessionData, sessionData, sessionData, sessionData, sessionData, sessionData, sessionData, sessionData, sessionData, sessionData];
-
 function SessionList() {
+  const [data, setData] = useState<SessionData[]>([]);
+  const { apiKey, generateJwt } = useSession();
+  const { startTime, endTime } = useSearch();
   const mStyles = useStyles();
+
+  useEffect(() => {
+    async function fetchData() {
+      if (!generateJwt) return;
+      
+      const jwt = generateJwt();
+      if (!jwt) return;
+      if (!apiKey) return;
+
+      const sessionIds = await SessionService.listSessionIds({
+        apiKey,
+        jwt: jwt.project,
+        startTime,
+        endTime
+      });
+
+      const promises = sessionIds.map(async (sessionId) => {
+        const jwt = generateJwt();
+        if (!jwt) return undefined;
+
+        return SessionService.retrieveDetail({
+          id: sessionId,
+          jwt: jwt.project,
+          apiKey,
+        });
+      });
+
+      const data = await Promise.all(promises);
+      const compactData = lodash.compact(data);
+      const sortedData = lodash.sortBy(compactData, (data) => data.createdAt.toMillis());
+
+      setData(sortedData);
+    }
+
+    fetchData();
+  }, [apiKey, generateJwt])
+
 
   return (
     <Card>
@@ -51,7 +96,7 @@ function SessionList() {
             <tbody>
               {
                 data.map((sessionData) => (
-                  <tr>
+                  <tr key={sessionData.id}>
                     <td className={mStyles.tableCell}>
                       {sessionData.id}
                     </td>

@@ -1,66 +1,67 @@
-{
-    "data": {
-      "project": {
-        "sessionData": {
-          "sessions": {
-            "resources": [
-              {
-                "publisherMinutes": 58.8471,
-                "subscriberMinutes": 66.35238333333334,
-                "meetings": {
-                  "totalCount": 5,
-                  "resources": [
-                    {
-                      "createdAt": "2021-01-26T16:17:22.958Z",
-                      "publishers": {
-                        "totalCount": 8
-                      },
-                      "subscribers": {
-                        "totalCount": 9
-                      }
-                    },
-                    {
-                      "createdAt": "2021-01-26T16:45:28.724Z",
-                      "publishers": {
-                        "totalCount": 12
-                      },
-                      "subscribers": {
-                        "totalCount": 18
-                      }
-                    },
-                    {
-                      "createdAt": "2021-01-26T18:10:25.419Z",
-                      "publishers": {
-                        "totalCount": 1
-                      },
-                      "subscribers": {
-                        "totalCount": 0
-                      }
-                    },
-                    {
-                      "createdAt": "2021-01-26T18:24:47.379Z",
-                      "publishers": {
-                        "totalCount": 1
-                      },
-                      "subscribers": {
-                        "totalCount": 0
-                      }
-                    },
-                    {
-                      "createdAt": "2021-01-27T17:13:34.584Z",
-                      "publishers": {
-                        "totalCount": 1
-                      },
-                      "subscribers": {
-                        "totalCount": 1
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        }
-      }
-    }
-  }
+{}
+// {
+//     "data": {
+//       "project": {
+//         "sessionData": {
+//           "sessions": {
+//             "resources": [
+//               {
+//                 "publisherMinutes": 58.8471,
+//                 "subscriberMinutes": 66.35238333333334,
+//                 "meetings": {
+//                   "totalCount": 5,
+//                   "resources": [
+//                     {
+//                       "createdAt": "2021-01-26T16:17:22.958Z",
+//                       "publishers": {
+//                         "totalCount": 8
+//                       },
+//                       "subscribers": {
+//                         "totalCount": 9
+//                       }
+//                     },
+//                     {
+//                       "createdAt": "2021-01-26T16:45:28.724Z",
+//                       "publishers": {
+//                         "totalCount": 12
+//                       },
+//                       "subscribers": {
+//                         "totalCount": 18
+//                       }
+//                     },
+//                     {
+//                       "createdAt": "2021-01-26T18:10:25.419Z",
+//                       "publishers": {
+//                         "totalCount": 1
+//                       },
+//                       "subscribers": {
+//                         "totalCount": 0
+//                       }
+//                     },
+//                     {
+//                       "createdAt": "2021-01-26T18:24:47.379Z",
+//                       "publishers": {
+//                         "totalCount": 1
+//                       },
+//                       "subscribers": {
+//                         "totalCount": 0
+//                       }
+//                     },
+//                     {
+//                       "createdAt": "2021-01-27T17:13:34.584Z",
+//                       "publishers": {
+//                         "totalCount": 1
+//                       },
+//                       "subscribers": {
+//                         "totalCount": 1
+//                       }
+//                     }
+//                   ]
+//                 }
+//               }
+//             ]
+//           }
+//         }
+//       }
+//     }
+//   }
