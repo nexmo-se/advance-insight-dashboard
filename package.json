@@ -5,6 +5,7 @@
   "dependencies": {
     "@apollo/client": "^3.3.9",
     "@material-ui/core": "^4.11.3",
+    "@material-ui/data-grid": "^4.0.0-alpha.19",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
@@ -18,6 +19,7 @@
     "@vonagevolta/volta2": "^0.0.56",
     "fetch": "^1.1.0",
     "graphql": "^15.5.0",
+    "lodash": "^4.17.20",
     "luxon": "^1.25.0",
     "opentok-jwt": "^0.1.4",
     "react": "^17.0.1",
@@ -51,5 +53,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.168"
   }
 }
