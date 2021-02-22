@@ -100,7 +100,7 @@ export function SessionSummaryQuery({
     return (
       <>
         <p>
-          <b>ADVANCES INSIGHTS SUMMARY</b>
+          <b>ADVANCED INSIGHTS SUMMARY</b>
         </p>
         <Box
           display="flex"
