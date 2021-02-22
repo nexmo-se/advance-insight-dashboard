@@ -13,13 +13,6 @@ function SessionSummary() {
   const { sessionIds } = useSearch();
   return (
     <Card>
-      <Card.Header>
-        <Box display="flex" alignItems="center" justifyContent="space-between">
-          <p>
-            <b>ADVANCED INSIGHTS SUMMARY</b>
-          </p>
-        </Box>
-      </Card.Header>
       <Card.Content>
           <span>
             {(apiKey && sessionIds && sessionIds.length)
@@ -33,3 +26,4 @@ function SessionSummary() {
 }
 
 export default SessionSummary;
+

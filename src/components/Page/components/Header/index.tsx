@@ -13,8 +13,7 @@ function Header() {
         "Vlt-bg-black"      
       )}
     >
-      <a
-        href="#"
+      <div
         className={mStyles.logoContainer}
       >
         <img
@@ -22,7 +21,7 @@ function Header() {
           src={VonageTokboxLogo}
           alt="Vonage Logo"
         />
-      </a>
+      </div>
     </header>
   )
 }

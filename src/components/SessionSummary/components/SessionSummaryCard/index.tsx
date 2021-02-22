@@ -1,18 +1,14 @@
-import React from "react";
-import { useQuery, gql } from "@apollo/client";
-import {
-  Box,
-  Table,
-  TableCell,
-  TableContainer,
-  Typography,
-  TableRow,
-  TableHead,
-  TableBody,
-} from "@material-ui/core";
-import { DataGrid, ColDef } from "@material-ui/data-grid";
+import { DateTime } from "luxon";
 import { get } from "lodash";
+
 import useStyles from "./styles";
+import { useQuery, gql } from "@apollo/client";
+
+import { Box, Grid } from "@material-ui/core";
+import { DataGrid, ColDef } from "@material-ui/data-grid";
+
+import TotalData from "../TotalData";
+import HumanizeNumber from "utils/humanize-number";
 
 // query getSessionSummaryData($projectId: String!, $sessionId: String! )
 
@@ -28,6 +24,7 @@ const GET_SESSION_SUMMARY_DATA = gql`
               totalCount
               resources {
                 createdAt
+                destroyedAt
                 publisherMinutes
                 subscriberMinutes
                 connections {
@@ -71,7 +68,7 @@ export function SessionSummaryQuery({
   apiKey: string;
   sessionIds: string[];
 }) {
-  const { loading, error, data } = useQuery(GET_SESSION_SUMMARY_DATA, {
+  const { loading, data } = useQuery(GET_SESSION_SUMMARY_DATA, {
     variables: { projectId: apiKey, sessionId: sessionIds },
   });
   const classes = useStyles();
@@ -102,148 +99,116 @@ export function SessionSummaryQuery({
     }
     return (
       <>
-        <Box display="flex" alignItems="center" justifyContent="space-between">
-          <div>{sessionIds[0]}</div>
-          <div>
-            <Typography variant="h5" component="span">
-              Session Created:{" "}
-            </Typography>
-            <Typography component="span" variant="body1">
-              {meetings[0].createdAt}
-            </Typography>
-          </div>
+        <p>
+          <b>ADVANCED INSIGHTS SUMMARY</b>
+        </p>
+        <Box
+          display="flex"
+          alignItems="flex-start"
+          justifyContent="space-between"
+        >
+          <p>
+            {sessionIds[0]}
+          </p>
+          <Box>
+            <p>
+              <strong>Session Created: &nbsp;</strong>
+              {
+                DateTime.fromISO(meetings[0].createdAt).toLocaleString(DateTime.DATETIME_MED)
+              }
+            </p>
+            <p>
+              <strong>Destroyed Created: &nbsp;</strong>
+              {
+                DateTime.fromISO(meetings[meetings.length - 1].destroyedAt).toLocaleString(DateTime.DATETIME_MED)
+              }
+            </p>
+          </Box>
         </Box>
-        <Box display="flex" alignItems="center" justifyContent="space-between">
+
+        <Grid spacing={2} container>
+          <Grid xs={6} item>
           {/* Session Summary */}
-          <Box display="flex" p={1} flexDirection="column">
-            <Box display="flex" flexDirection="row">
-              <Box display="flex" flexDirection="column" m={3}>
-                <Typography variant="h3" component="span">
-                  Total Minutes
-                </Typography>
-                <Box
-                  display="flex"
-                  flexDirection="row"
-                  justifyContent="space-between"
-                  alignItems="center"
-                >
-                  <Box display="flex">
-                    <Typography className={classes.totalMinutesStyle}>
-                      {Math.round(
-                        resources[0].publisherMinutes +
+            <Box
+              display="flex"
+              mt={2}
+              flexDirection="column"
+            >
+              <Grid spacing={2} container>
+                <Grid xs={7} item>
+                  <TotalData
+                    type="minutes"
+                    total={
+                      HumanizeNumber.humanize({
+                        number: Math.round(
+                          resources[0].publisherMinutes +
                           resources[0].subscriberMinutes
-                      )}
-                    </Typography>
-                  </Box>
-                  <Box
-                    display="flex"
-                    flexDirection="column"
-                    justifyContent="center"
-                    p={1}
-                  >
-                    <Box display="flex">
-                      <Typography
-                        component="span"
-                        className={classes.pubSubMinutesTitleStyle}
-                      >
-                        Publisher Min:{" "}
-                      </Typography>
-                      <Typography
-                        component="span"
-                        className={classes.pubSubMinutesStyle}
-                      >
-                        {Math.round(resources[0].publisherMinutes)}
-                      </Typography>
-                    </Box>
-                    <Box display="flex">
-                      <Typography
-                        component="span"
-                        className={classes.pubSubMinutesTitleStyle}
-                      >
-                        Subscriber Min:{" "}
-                      </Typography>
-                      <Typography
-                        component="span"
-                        className={classes.pubSubMinutesStyle}
-                      >
-                        {Math.round(resources[0].subscriberMinutes)}
-                      </Typography>
-                    </Box>
-                  </Box>
+                        )
+                      })
+                    }
+                    breakdown={[
+                      {
+                        title: "Publisher Min: ",
+                        value: HumanizeNumber.humanize({
+                          number: Math.round(resources[0].publisherMinutes)
+                        })
+                      },
+                      {
+                        title: "Subscriber Min: ",
+                        value: HumanizeNumber.humanize({
+                          number: Math.round(resources[0].subscriberMinutes)
+                        })
+                      }
+                    ]}
+                  />
+                </Grid>
+                <Grid xs={5} item>
+                  <TotalData
+                    type="connections"
+                    total={totalConnections}
+                    breakdown={[
+                      {
+                        title: "Publishers: ",
+                        value: totalPublishers
+                      },
+                      {
+                        title: "Subscribers",
+                        value: totalSubscribers
+                      }
+                    ]}
+                  />
+                </Grid>
+              </Grid>
+              <Box
+                display="flex"
+                flexDirection="column"
+                mt={2}
+              >
+                <Box>
+                  <p>
+                    <b>Usage Breakdown</b>
+                  </p>
                 </Box>
-              </Box>
-              <Box display="flex" flexDirection="column" m={3}>
-                <Typography variant="h3" component="span">
-                  Total Connections
-                </Typography>
-                <Box
-                  display="flex"
-                  flexDirection="row"
-                  justifyContent="space-between"
-                  alignItems="center"
-                >
-                  <Box display="flex">
-                    <Typography className={classes.totalMinutesStyle}>
-                      {totalConnections}
-                    </Typography>
-                  </Box>
-                  <Box
-                    display="flex"
-                    flexDirection="column"
-                    justifyContent="center"
-                    p={1}
-                  >
-                    <Box display="flex">
-                      <Typography
-                        component="span"
-                        className={classes.pubSubMinutesTitleStyle}
-                      >
-                        Publishers:{" "}
-                      </Typography>
-                      <Typography
-                        component="span"
-                        className={classes.pubSubMinutesStyle}
-                      >
-                        {totalPublishers}
-                      </Typography>
-                    </Box>
-                    <Box display="flex">
-                      <Typography
-                        component="span"
-                        className={classes.pubSubMinutesTitleStyle}
-                      >
-                        Subscribers:{" "}
-                      </Typography>
-                      <Typography
-                        component="span"
-                        className={classes.pubSubMinutesStyle}
-                      >
-                        {totalSubscribers}
-                      </Typography>
-                    </Box>
-                  </Box>
+                <Box display="flex" style={{ width: "100%" }}>
+                  <DataGrid
+                    rows={meetingsData}
+                    columns={usageBreakdownColumn}
+                    pageSize={3}
+                    density="compact"
+                    autoHeight={true}
+                  />
                 </Box>
               </Box>
             </Box>
+          </Grid>
+
+          <Grid xs={6} item>
+            {/* Session Quality */}
             <Box display="flex" flexDirection="column">
-              <Box m={2}>
-                <Typography variant="h5">Usage Breakdown</Typography>
-              </Box>
-              <Box display="flex" style={{ height: 400, width: "100%" }}>
-                <DataGrid
-                  rows={meetingsData}
-                  columns={usageBreakdownColumn}
-                  pageSize={5}
-                  showToolbar={true}
-                />
-              </Box>
+              <h3>Quality</h3>
             </Box>
-          </Box>
-          {/* Session Quality */}
-          <Box display="flex" flexDirection="column">
-            <h3>Quality</h3>
-          </Box>
-        </Box>
+          </Grid>
+        </Grid>
       </>
     );
   }

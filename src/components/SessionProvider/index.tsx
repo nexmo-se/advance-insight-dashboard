@@ -10,8 +10,8 @@ interface ISessionProvider {
 }
 
 export function SessionProvider({ children }: ISessionProvider) {
-  const [apiKey, setApiKey] = useState<string | undefined>();
-  const [apiSecret, setApiSecret] = useState<string | undefined>();
+  const [apiKey, setApiKey] = useState<string>("");
+  const [apiSecret, setApiSecret] = useState<string>("");
   const { push } = useHistory();
 
   function signIn({ apiKey, apiSecret }: SignInType) {
@@ -38,7 +38,7 @@ export function SessionProvider({ children }: ISessionProvider) {
         setApiSecret(apiSecret);
       } else push("/login");
     },
-    []
+    [push]
   )
   
   return (
