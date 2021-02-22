@@ -96,7 +96,7 @@ function SessionList() {
                   ))
                 }
 
-                {
+                {/**
                   (endCursor) && (
                     <Box
                       mt={2}
@@ -106,7 +106,7 @@ function SessionList() {
                       <span>Load more...</span>
                     </Box>
                   )
-                }
+                 */}
               </tbody>
             </table>
           </Box>
