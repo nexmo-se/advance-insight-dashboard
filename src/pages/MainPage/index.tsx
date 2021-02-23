@@ -7,7 +7,8 @@ import { Grid } from "@material-ui/core";
 import Card from "components/Card";
 import {useAppApolloClient} from '../../auth/apolloAuth';
 import { ApolloProvider } from "@apollo/client";
-import SessionSummary from '../../components/SessionSummary'
+import SessionSummary from "components/SessionSummary";
+import SessionList from "components/SessionList";
 
 function MainPage() {
   const [container, setContainer] = useState<any>(null);
@@ -18,7 +19,17 @@ function MainPage() {
         <ApolloProvider client={apolloClient}>
       <SearchAndFilter container={container}>
         {/** Put any component based on the seach and filter */}
-        <SessionSummary ></SessionSummary>
+        <Grid spacing={2} container item>
+          <Grid xs={6} item></Grid>
+          <Grid xs={6} item>
+            <SessionList />
+          </Grid>
+        </Grid>
+        <Grid spacing={2} container item>
+          <Grid xs={12} item>
+            <SessionSummary />
+          </Grid>
+        </Grid>
       </SearchAndFilter>
 
       <Grid
@@ -26,7 +37,10 @@ function MainPage() {
         ref={setContainer}
         container
       >
-        {/** In real, the component above will be rendered here. */}
+        {/**
+         * In real, the component above will be rendered here.
+         * So, do not put any component here.
+         * */}
       </Grid>
       </ApolloProvider>
     </Page>

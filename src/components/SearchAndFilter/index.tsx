@@ -24,8 +24,6 @@ function SearchAndFilter ({ children, container }: ISearchAndFilter) {
     setSelectedEndTime(endTime);
   }
 
-  useEffect(() => console.log(container))
-
   return (
     <SearchContext.Provider
       value={{

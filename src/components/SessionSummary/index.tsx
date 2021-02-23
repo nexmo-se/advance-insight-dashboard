@@ -1,17 +1,29 @@
-
 import { useSession } from "components/SessionProvider";
 import { useSearch } from "components/SearchAndFilter";
-import {SessionSummaryQuery} from './components/SessionSummaryCard'
+import { SessionSummaryQuery } from "./components/SessionSummaryCard";
+import Card from "components/Card";
+import Button from "components/Button";
 
+import { Box } from "@material-ui/core";
+
+// Assumptions: this component handles one session at a time.
 
 function SessionSummary() {
   const { apiKey } = useSession();
   const { sessionIds } = useSearch();
-  if (apiKey && sessionIds && sessionIds.length) {
-    return <SessionSummaryQuery apiKey={apiKey} sessionIds={sessionIds} />
-  } else {
-    return <h1>No session selected</h1>;
-  }
+  return (
+    <Card>
+      <Card.Content>
+          <span>
+            {(apiKey && sessionIds && sessionIds.length)
+              ? <SessionSummaryQuery apiKey={apiKey} sessionIds={sessionIds} />
+              : "No session Selected"}
+          </span>
+      </Card.Content>
+    </Card>
+  );
+
 }
 
 export default SessionSummary;
+

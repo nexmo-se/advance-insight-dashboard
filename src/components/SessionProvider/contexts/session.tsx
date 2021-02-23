@@ -8,4 +8,5 @@ type SessionContextType = {
   signOut: () => void
 }
 
-export const SessionContext = createContext<Partial<SessionContextType>>({});
+// Assuming I only access `useSession` inside `SessionProvider`
+export const SessionContext = createContext<SessionContextType>({} as SessionContextType);
