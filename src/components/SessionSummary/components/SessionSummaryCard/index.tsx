@@ -13,14 +13,14 @@ import HumanizeNumber from "utils/humanize-number";
 // query getSessionSummaryData($projectId: String!, $sessionId: String! )
 
 const GET_SESSION_SUMMARY_DATA = gql`
-  query GetSessionSummaryData($projectId: Int!, $sessionId: [String]!) {
+  query GetSessionSummaryData($projectId: Int!, $sessionId: [String]!, $startTime: Date!, $endTime: Date!) {
     project(projectId: $projectId) {
       sessionData {
         sessions(sessionIds: $sessionId) {
           resources {
             publisherMinutes
             subscriberMinutes
-            meetings {
+            meetings (start: $startTime, end: $endTime){
               totalCount
               resources {
                 createdAt
@@ -64,25 +64,30 @@ const usageBreakdownColumn: ColDef[] = [
 export function SessionSummaryQuery({
   apiKey,
   sessionIds,
+  startTime,
+  endTime
 }: {
   apiKey: string;
   sessionIds: string[];
+  startTime: DateTime;
+  endTime: DateTime;
 }) {
   const { loading, data } = useQuery(GET_SESSION_SUMMARY_DATA, {
-    variables: { projectId: apiKey, sessionId: sessionIds },
+    variables: { projectId: apiKey, sessionId: sessionIds, startTime, endTime },
   });
   const classes = useStyles();
   if (loading) {
     return <p>Loading ...</p>;
   }
   const resources = get(data, "project.sessionData.sessions.resources", []);
-  if (resources && resources[0].meetings) {
+  if (resources && resources.length && resources[0].meetings) {
     let meetings = get(resources[0], "meetings.resources", []);
     let totalConnections = 0;
     let totalPublishers = 0;
     let totalSubscribers = 0;
     let meetingsData = [];
     for (let i = 0; i < meetings.length; i += 1) {
+      console.log("[SessionSummaryCard] - meetings",meetings[i])
       totalConnections += meetings[i].connections.totalCount;
       totalPublishers += meetings[i].publishers.totalCount;
       totalSubscribers += meetings[i].subscribers.totalCount;

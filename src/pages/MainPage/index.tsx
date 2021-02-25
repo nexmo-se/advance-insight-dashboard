@@ -9,6 +9,7 @@ import {useAppApolloClient} from '../../auth/apolloAuth';
 import { ApolloProvider } from "@apollo/client";
 import SessionSummary from "components/SessionSummary";
 import SessionList from "components/SessionList";
+import SessionDeepDive from "components/SessionDeepDive"
 
 function MainPage() {
   const [container, setContainer] = useState<any>(null);
@@ -28,6 +29,11 @@ function MainPage() {
         <Grid spacing={2} container item>
           <Grid xs={12} item>
             <SessionSummary />
+          </Grid>
+        </Grid>
+        <Grid spacing={2} container item>
+          <Grid xs={12} item>
+            <SessionDeepDive></SessionDeepDive>
           </Grid>
         </Grid>
       </SearchAndFilter>
