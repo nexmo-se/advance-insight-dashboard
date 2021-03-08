@@ -1,13 +1,14 @@
 import { DateTime } from "luxon";
 import { get } from "lodash";
 
-import useStyles from "./styles";
 import { useQuery, gql } from "@apollo/client";
+import { useState } from "react";
 
 import { Box, Grid } from "@material-ui/core";
 import { DataGrid, ColDef } from "@material-ui/data-grid";
 
 import TotalData from "../TotalData";
+import Dropdown from "components/Dropdown";
 import HumanizeNumber from "utils/humanize-number";
 
 // query getSessionSummaryData($projectId: String!, $sessionId: String! )
@@ -23,6 +24,7 @@ const GET_SESSION_SUMMARY_DATA = gql`
             meetings (start: $startTime, end: $endTime){
               totalCount
               resources {
+                meetingId
                 createdAt
                 destroyedAt
                 publisherMinutes
@@ -61,24 +63,26 @@ const usageBreakdownColumn: ColDef[] = [
   { field: "minutes", headerName: "MINUTES", width: 150 },
 ];
 
-export function SessionSummaryQuery({
-  apiKey,
-  sessionIds,
-  startTime,
-  endTime
-}: {
+interface SessionSummaryQueryProps {
   apiKey: string;
   sessionIds: string[];
   startTime: DateTime;
   endTime: DateTime;
-}) {
+}
+
+export function SessionSummaryQuery({ apiKey, sessionIds, startTime,
+    endTime}: SessionSummaryQueryProps) {
+  const [selectedMeeting, setSelectedMeeting] = useState<any>({ value: "view-all-meetings", label: "View All Meetings"});
   const { loading, data } = useQuery(GET_SESSION_SUMMARY_DATA, {
     variables: { projectId: apiKey, sessionId: sessionIds, startTime, endTime },
   });
-  const classes = useStyles();
-  if (loading) {
-    return <p>Loading ...</p>;
+
+  if (loading) return <p>Loading ...</p>;
+
+  function handleMeetingChange (item: Record<string, any>) {
+    setSelectedMeeting(item);
   }
+
   const resources = get(data, "project.sessionData.sessions.resources", []);
   if (resources && resources.length && resources[0].meetings) {
     let meetings = get(resources[0], "meetings.resources", []);
@@ -102,32 +106,69 @@ export function SessionSummaryQuery({
         )
       );
     }
+
     return (
       <>
-        <p>
-          <b>ADVANCED INSIGHTS SUMMARY</b>
-        </p>
+        {/** HEADER SECTION */}
         <Box
           display="flex"
           alignItems="flex-start"
           justifyContent="space-between"
         >
-          <p>
-            {sessionIds[0]}
-          </p>
           <Box>
-            <p>
-              <strong>Session Created: &nbsp;</strong>
+            <b>ADVANCED INSIGHTS SUMMARY</b>
+            <br />
+            {sessionIds[0]}
+            <br />
+            <Box
+              display="flex"
+              alignItems="flex-start"
+            >
+              <Box mr={2}>
+                <p>
+                  <strong>Meeting Created: &nbsp;</strong>
+                  {
+                    DateTime.fromISO(meetings[0].createdAt).toLocaleString(DateTime.DATETIME_MED)
+                  }
+                </p>
+              </Box>
+              <p>
+                <strong>Meeting Destroyed: &nbsp;</strong>
+                {
+                  DateTime.fromISO(meetings[0].destroyedAt).toLocaleString(DateTime.DATETIME_MED)
+                }
+              </p>
+            </Box>
+          </Box>
+          <Box display="flex">
+            <Box mr={2}>
+            <Dropdown
+              value={selectedMeeting}
+              onChange={handleMeetingChange}
+            >
               {
-                DateTime.fromISO(meetings[0].createdAt).toLocaleString(DateTime.DATETIME_MED)
+                meetings.map(
+                  (meeting: Record<string, any>) => {
+                    const date = DateTime.fromISO(meeting.createdAt).toLocaleString(DateTime.DATE_MED);
+                    const startTime = DateTime.fromISO(meeting.createdAt).toLocaleString(DateTime.TIME_24_SIMPLE);
+                    const endTime = DateTime.fromISO(meeting.destroyedAt).toLocaleString(DateTime.TIME_24_SIMPLE)
+                    return (
+                      <Dropdown.Item
+                        key={meeting.meetingId}
+                        value={meeting.meetingId}
+                        label={`${date} ${startTime}-${endTime}`}
+                      />
+                    )
+                  }
+                )
               }
-            </p>
-            <p>
-              <strong>Destroyed Created: &nbsp;</strong>
-              {
-                DateTime.fromISO(meetings[meetings.length - 1].destroyedAt).toLocaleString(DateTime.DATETIME_MED)
-              }
-            </p>
+              <Dropdown.Item value="view-all-meetings" label="View All Meetings" />
+            </Dropdown>
+            </Box>
+
+            <button className="Vlt-btn Vlt-btn--primary Vlt-btn--app Vlt-btn--outline">
+              View Inspector
+            </button>
           </Box>
         </Box>
 
