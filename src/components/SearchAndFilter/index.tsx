@@ -2,20 +2,21 @@ import { DateTime } from "luxon";
 import { SearchContext } from "./contexts/search";
 import { SaveClickEvent } from "./types";
 
-import { RefObject, useEffect, useState } from "react";
+import { useState } from "react";
 import { useSearch } from "./hooks/search";
 
 import SearchCard from "./components/SearchCard";
 import { Grid, Portal } from "@material-ui/core";
 
-interface ISearchAndFilter {
+interface SearchAndFilterProps {
   children: any;
   container: any;
 }
 
-function SearchAndFilter ({ children, container }: ISearchAndFilter) {
+// selectedStartTime will start from 21 days before because of Tokbox retention period
+function SearchAndFilter ({ children, container }: SearchAndFilterProps) {
   const [selectedSessionIds, setSelectedSessionIds] = useState<string[]>([]);
-  const [selectedStartTime, setSelectedStartTime] = useState<DateTime>(DateTime.local().minus({ day: 7 }));
+  const [selectedStartTime, setSelectedStartTime] = useState<DateTime>(DateTime.local().minus({ day: 21 }));
   const [selectedEndTime, setSelectedEndTime] = useState<DateTime>(DateTime.local());
 
   function handleSaveClick({ sessionIds, startTime, endTime }: SaveClickEvent) {
