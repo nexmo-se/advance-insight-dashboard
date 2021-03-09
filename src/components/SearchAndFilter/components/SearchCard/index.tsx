@@ -1,12 +1,12 @@
 import "react-datepicker/dist/react-datepicker.css";
 
 import { useState, useEffect } from "react";
-import { forwardRef } from "react";
 import { DateTime } from "luxon";
 
 import { MouseEvent } from "react";
 import { SaveClickEvent } from "components/SearchAndFilter/types";
 
+import DatePickerInput from "../DatePickerInput";
 import Card from "components/Card";
 import Button from "components/Button";
 import DatePicker from "react-datepicker";
@@ -15,24 +15,6 @@ import { Box } from "@material-ui/core";
 interface ISearchCard {
   onSaveClick: (args: SaveClickEvent) => void;
 }
-
-const DatePickerInput = forwardRef(({ value, onClick, marginLeft }: any, ref: any) => {
-  return (
-    <Box
-      className="Vlt-dropdown"
-      marginLeft={marginLeft? 2: 0}
-    >
-      <Box className="Vlt-dropdown__trigger Vlt-dropdown__trigger--btn">
-        <Button.Tertiary
-          onClick={onClick}
-          app
-        >
-          {DateTime.fromFormat(value, "dd/MM/yyyy").toLocaleString(DateTime.DATE_MED)}
-        </Button.Tertiary>
-      </Box>
-    </Box>
-  )
-});
 
 function SearchCard({ onSaveClick }: ISearchCard) {
   const [saving, setSaving] = useState<boolean>(false);
@@ -76,29 +58,31 @@ function SearchCard({ onSaveClick }: ISearchCard) {
   return (
     <Card>
       <Card.Header>
-        <Box
-          display="flex"
-          alignItems="center"
-          justifyContent="space-between"
-        >
-          <p>
-            <b>SEARCH AND FILTERS</b>
-          </p>
-          <Button.Primary
-            onClick={handleSaveClick}
-            disabled={saving}
-            app
-          >
-            Save Filter(s)
-          </Button.Primary>
-        </Box>
+        <p>
+          <b>SEARCH AND FILTERS</b>
+        </p>
       </Card.Header>
       <Card.Content>
         <Box
           display="flex"
           flexDirection="row"
+          alignItems="flex-end"
         >
-          <Box>
+          <Box
+            flex={1}
+            marginRight={2}
+          >
+            <p>Search By Session Id(s)</p>
+            <Box className="Vlt-textarea">
+              <textarea
+                rows={2}
+                value={sessionIds?.join(",")}
+                onChange={handleSessionIdsChange}
+                placeholder="Session Id(s) (Optional)"
+              />
+            </Box>
+          </Box>
+          <Box mr={2}>
             <p>Search By Time Range</p>
             <Box id="date-picker-portal" />
             <Box>
@@ -127,19 +111,13 @@ function SearchCard({ onSaveClick }: ISearchCard) {
               />
             </Box>
           </Box>
-          <Box
-            flex={1}
-            marginLeft={2}
+          <Button.Secondary
+            onClick={handleSaveClick}
+            disabled={saving}
+            app
           >
-            <p>Search By Session Id(s)</p>
-            <Box className="Vlt-textarea">
-              <textarea
-                rows={4}
-                value={sessionIds?.join(",")}
-                onChange={handleSessionIdsChange}
-              />
-            </Box>
-          </Box>
+            Search
+          </Button.Secondary>
         </Box>
       </Card.Content>
     </Card>
