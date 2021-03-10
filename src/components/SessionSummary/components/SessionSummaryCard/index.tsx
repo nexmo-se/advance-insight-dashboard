@@ -47,6 +47,40 @@ const GET_SESSION_SUMMARY_DATA = gql`
   }
 `;
 
+const GET_SESSION_SUMMARY_DATA_BY_MEETING = gql`
+  query GetSessionSummaryData($projectId: Int!, $sessionId: [String]!, $startTime: Date!, $endTime: Date!, $meetingId: String!) {
+    project(projectId: $projectId) {
+      sessionData {
+        sessions(sessionIds: $sessionId) {
+          resources {
+            publisherMinutes
+            subscriberMinutes
+            meetings (start: $startTime, end: $endTime, meetingId: $meetingId){
+              totalCount
+              resources {
+                meetingId
+                createdAt
+                destroyedAt
+                publisherMinutes
+                subscriberMinutes
+                connections {
+                  totalCount
+                }
+                publishers {
+                  totalCount
+                }
+                subscribers {
+                  totalCount
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
 function createUsageBreakDownData(
   id: number,
   publishers: number,
@@ -63,6 +97,7 @@ const usageBreakdownColumn: ColDef[] = [
   { field: "minutes", headerName: "MINUTES", width: 150 },
 ];
 
+
 interface SessionSummaryQueryProps {
   apiKey: string;
   sessionIds: string[];
@@ -72,26 +107,37 @@ interface SessionSummaryQueryProps {
 
 export function SessionSummaryQuery({ apiKey, sessionIds, startTime,
     endTime}: SessionSummaryQueryProps) {
-  const [selectedMeeting, setSelectedMeeting] = useState<any>({ value: "view-all-meetings", label: "View All Meetings"});
-  const { loading, data } = useQuery(GET_SESSION_SUMMARY_DATA, {
-    variables: { projectId: apiKey, sessionId: sessionIds, startTime, endTime },
+  const [selectedMeeting, setSelectedMeeting] = useState<any>({ value: null, label: "View All Meetings"});
+  let queryToUse = GET_SESSION_SUMMARY_DATA;
+  const {value: selectedMeetingId} = selectedMeeting;
+  if (selectedMeetingId) {
+    queryToUse = GET_SESSION_SUMMARY_DATA_BY_MEETING;
+  }
+  console.log('SessionSummaryQuery - Render', {apiKey, sessionIds, startTime,
+    endTime})
+  const { loading, data } = useQuery(queryToUse, {
+    variables: { projectId: apiKey, sessionId: sessionIds, startTime, endTime, meetingId: selectedMeetingId },
   });
 
   if (loading) return <p>Loading ...</p>;
-
   function handleMeetingChange (item: Record<string, any>) {
     setSelectedMeeting(item);
   }
 
   const resources = get(data, "project.sessionData.sessions.resources", []);
+  
   if (resources && resources.length && resources[0].meetings) {
+    console.log("[SessionSummaryCard] - resources", resources[0].meetings)
     let meetings = get(resources[0], "meetings.resources", []);
     let totalConnections = 0;
     let totalPublishers = 0;
     let totalSubscribers = 0;
     let meetingsData = [];
+    if (!meetings.length) {
+        return <p>There are not meetings for this session</p>;
+    }
+    // todo it could happen that meetings has 0 entry - need to change the createdAt
     for (let i = 0; i < meetings.length; i += 1) {
-      console.log("[SessionSummaryCard] - meetings",meetings[i])
       totalConnections += meetings[i].connections.totalCount;
       totalPublishers += meetings[i].publishers.totalCount;
       totalSubscribers += meetings[i].subscribers.totalCount;
@@ -162,7 +208,7 @@ export function SessionSummaryQuery({ apiKey, sessionIds, startTime,
                   }
                 )
               }
-              <Dropdown.Item value="view-all-meetings" label="View All Meetings" />
+              <Dropdown.Item value={null} label="View All Meetings" />
             </Dropdown>
             </Box>
 

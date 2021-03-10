@@ -5,12 +5,13 @@ import { Box } from "@material-ui/core";
 
 interface ItemProps {
   selected?: boolean;
-  value: string;
+  value: string | null;
   label?: string;
+  key?: string;
   onClick?: (item: any) => void;
 }
 
-function Item ({ selected = false, value, label, onClick }: ItemProps) {
+function Item ({ selected = false, value, key, label, onClick }: ItemProps) {
   function handleClick (e: MouseEvent<HTMLDivElement>) {
     if (onClick) onClick({ value, label })
   }
@@ -24,6 +25,7 @@ function Item ({ selected = false, value, label, onClick }: ItemProps) {
         })
       }
       onClick={handleClick}
+      key={key}
     >
       { label? label: value }
     </Box>

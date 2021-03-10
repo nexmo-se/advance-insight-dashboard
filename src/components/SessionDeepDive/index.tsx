@@ -16,8 +16,8 @@ import {
 
 function SessionDeepDive() {
   const { apiKey } = useSession();
+  // const { sessionIds, startTime, endTime, meetingId } = useSearch();
   const { sessionIds, startTime, endTime } = useSearch();
-  console.log('SessionDeepDive', sessionIds, apiKey)
   if (apiKey && sessionIds && sessionIds.length) {
     return (
         <Card>
@@ -32,12 +32,20 @@ function SessionDeepDive() {
                 <p>Usage Timeline</p>
               </AccordionSummary>
               <AccordionDetails>
-                <UsageTimeline
+              <UsageTimeline
                   apiKey={apiKey}
                   sessionIds={sessionIds}
                   startTime={startTime}
                   endTime={endTime}
                 ></UsageTimeline>
+                {/* {meetingId ? <UsageTimeline
+                  apiKey={apiKey}
+                  sessionIds={sessionIds}
+                  startTime={startTime}
+                  endTime={endTime}
+                  meetingId={meetingId} 
+                ></UsageTimeline> : "Please select a meeting to display the graph"} 
+                 todo uncomment when Frans Ready */} 
               </AccordionDetails>
             </Accordion>
           </Card.Content>
