@@ -21,7 +21,7 @@ interface ISearchCard {
 function SearchCard({ onSaveClick }: ISearchCard) {
   const [saving, setSaving] = useState<boolean>(false);
   const [sessionIds, setSessionIds] = useState<string[]>([]);
-  const [startTime, setStartTime] = useState<DateTime>(DateTime.local().minus({ day: 7 }));
+  const [startTime, setStartTime] = useState<DateTime>(DateTime.local().minus({ day: 21 }));
   const [endTime, setEndTime] = useState<DateTime>(DateTime.local());
   
   /**
