@@ -164,34 +164,6 @@ UsageTimelineInterface) {
         },
       },
       series: publisherSeries,
-      /* series: [
-          {
-            name: 'Bob',
-            data: [{
-              x: 'Design',
-              y: [new Date('2021-02-24T16:12:05.000Z').getTime(), new Date('2021-02-24T12:12:05.000Z').getTime()]
-            }, {
-              x: 'Design',
-              y: [new Date('2021-02-24T09:12:05.000Z').getTime(), new Date('2021-02-24T10:12:05.000Z').getTime()]
-              
-            }]
-          }, {
-            name: 'Joe',
-            data: [{
-              x: 'Design',
-              y: [new Date('2019-03-01').getTime(), new Date('2019-03-02').getTime()] 
-            }, {
-              x: 'Code',
-              y: [new Date('2019-03-03').getTime(), new Date('2019-03-07').getTime()] 
-            }, {
-              x: 'Test',
-              y: [new Date('2019-03-06').getTime(), new Date('2019-03-09').getTime()]
-            }, {
-              x: 'Deployment',
-              y: [new Date('2019-03-10').getTime(), new Date('2019-03-11').getTime()]
-            }]
-          } 
-        ] */
     };
     return (
       <div id="chart">
