@@ -1,17 +1,18 @@
 import lodash from "lodash";
+import { DropdownItem } from "types/Dropdown";
 import { useEffect, cloneElement } from "react";
 
 import Item from "./components/Item";
 import { Box } from "@material-ui/core";
 
 interface DropdownProps {
-  value: any;
-  onChange?: (selected: any) => void;
+  value: DropdownItem;
+  onChange?: (selected: DropdownItem) => void;
   children?: any;
 }
 
 function Dropdown ({ value, children, onChange }: DropdownProps) {
-  function handleClick (item: any) {
+  function handleClick (item: DropdownItem) {
     if (onChange) onChange(item);
   }
 

@@ -1,3 +1,4 @@
+import HumanizeNumber from "utils/humanize-number";
 import { DateTime } from "luxon";
 import { get } from "lodash";
 
@@ -8,8 +9,8 @@ import { Box, Grid } from "@material-ui/core";
 import { DataGrid, ColDef } from "@material-ui/data-grid";
 
 import TotalData from "../TotalData";
-import Dropdown from "components/Dropdown";
-import HumanizeNumber from "utils/humanize-number";
+import MeetingDropdown from "../MeetingDropdown";
+
 
 // query getSessionSummaryData($projectId: String!, $sessionId: String! )
 
@@ -188,28 +189,7 @@ export function SessionSummaryQuery({ apiKey, sessionIds, startTime,
           </Box>
           <Box display="flex">
             <Box mr={2}>
-            <Dropdown
-              value={selectedMeeting}
-              onChange={handleMeetingChange}
-            >
-              {
-                meetings.map(
-                  (meeting: Record<string, any>) => {
-                    const date = DateTime.fromISO(meeting.createdAt).toLocaleString(DateTime.DATE_MED);
-                    const startTime = DateTime.fromISO(meeting.createdAt).toLocaleString(DateTime.TIME_24_SIMPLE);
-                    const endTime = DateTime.fromISO(meeting.destroyedAt).toLocaleString(DateTime.TIME_24_SIMPLE)
-                    return (
-                      <Dropdown.Item
-                        key={meeting.meetingId}
-                        value={meeting.meetingId}
-                        label={`${date} ${startTime}-${endTime}`}
-                      />
-                    )
-                  }
-                )
-              }
-              <Dropdown.Item value={null} label="View All Meetings" />
-            </Dropdown>
+              <MeetingDropdown meetings={meetings} />
             </Box>
 
             <button className="Vlt-btn Vlt-btn--primary Vlt-btn--app Vlt-btn--outline">
