@@ -1,3 +1,4 @@
+import HumanizeNumber from "utils/humanize-number";
 import { DateTime } from "luxon";
 import { get } from "lodash";
 
@@ -9,8 +10,7 @@ import { DataGrid, ColDef } from "@material-ui/data-grid";
 
 import TotalData from "../TotalData";
 import QuickQualityView from "../QuickQualityView";
-import Dropdown from "components/Dropdown";
-import HumanizeNumber from "utils/humanize-number";
+import MeetingDropdown from "../MeetingDropdown";
 
 // query getSessionSummaryData($projectId: String!, $sessionId: String! )
 
@@ -70,16 +70,11 @@ interface SessionSummaryQueryProps {
 }
 
 export function SessionSummaryQuery({ apiKey, sessionIds, }: SessionSummaryQueryProps) {
-  const [selectedMeeting, setSelectedMeeting] = useState<any>({ value: "view-all-meetings", label: "View All Meetings"});
   const { loading, data } = useQuery(GET_SESSION_SUMMARY_DATA, {
     variables: { projectId: apiKey, sessionId: sessionIds },
   });
 
   if (loading) return <p>Loading ...</p>;
-
-  function handleMeetingChange (item: Record<string, any>) {
-    setSelectedMeeting(item);
-  }
 
   const resources = get(data, "project.sessionData.sessions.resources", []);
   if (resources && resources[0].meetings) {
@@ -139,28 +134,7 @@ export function SessionSummaryQuery({ apiKey, sessionIds, }: SessionSummaryQuery
           </Box>
           <Box display="flex">
             <Box mr={2}>
-            <Dropdown
-              value={selectedMeeting}
-              onChange={handleMeetingChange}
-            >
-              {
-                meetings.map(
-                  (meeting: Record<string, any>) => {
-                    const date = DateTime.fromISO(meeting.createdAt).toLocaleString(DateTime.DATE_MED);
-                    const startTime = DateTime.fromISO(meeting.createdAt).toLocaleString(DateTime.TIME_24_SIMPLE);
-                    const endTime = DateTime.fromISO(meeting.destroyedAt).toLocaleString(DateTime.TIME_24_SIMPLE)
-                    return (
-                      <Dropdown.Item
-                        key={meeting.meetingId}
-                        value={meeting.meetingId}
-                        label={`${date} ${startTime}-${endTime}`}
-                      />
-                    )
-                  }
-                )
-              }
-              <Dropdown.Item value="view-all-meetings" label="View All Meetings" />
-            </Dropdown>
+              <MeetingDropdown meetings={meetings} />
             </Box>
 
             <button className="Vlt-btn Vlt-btn--primary Vlt-btn--app Vlt-btn--outline">
