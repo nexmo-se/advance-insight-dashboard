@@ -18,6 +18,7 @@ function SearchAndFilter ({ children, container }: SearchAndFilterProps) {
   const [selectedSessionIds, setSelectedSessionIds] = useState<string[]>([]);
   const [selectedStartTime, setSelectedStartTime] = useState<DateTime>(DateTime.local().minus({ day: 21 }));
   const [selectedEndTime, setSelectedEndTime] = useState<DateTime>(DateTime.local());
+  const [selectedMeetingId, setSelectedMeetingId] = useState<string | undefined>();
 
   function handleSaveClick({ sessionIds, startTime, endTime }: SaveClickEvent) {
     setSelectedSessionIds(sessionIds);
@@ -28,10 +29,12 @@ function SearchAndFilter ({ children, container }: SearchAndFilterProps) {
   return (
     <SearchContext.Provider
       value={{
+        meetingId: selectedMeetingId,
         sessionIds: selectedSessionIds,
         startTime: selectedStartTime,
         endTime: selectedEndTime,
-        setSessionIds: setSelectedSessionIds
+        setSessionIds: setSelectedSessionIds,
+        setMeetingId: setSelectedMeetingId
       }}
     >
       <Grid spacing={2} container>
