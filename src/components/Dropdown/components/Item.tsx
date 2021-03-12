@@ -15,7 +15,7 @@ function Item ({ selected = false, value, key, label, onClick }: ItemProps) {
   function handleClick (e: MouseEvent<HTMLDivElement>) {
     if (onClick) onClick({ value, label })
   }
-  console.log("DropdownItem - key", key)
+  
   return (
     <Box
       className={
