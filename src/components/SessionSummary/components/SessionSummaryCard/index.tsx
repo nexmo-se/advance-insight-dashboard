@@ -1,14 +1,16 @@
+import HumanizeNumber from "utils/humanize-number";
 import { DateTime } from "luxon";
 import { get } from "lodash";
 
-import useStyles from "./styles";
 import { useQuery, gql } from "@apollo/client";
+import { useState } from "react";
 
 import { Box, Grid } from "@material-ui/core";
 import { DataGrid, ColDef } from "@material-ui/data-grid";
 
 import TotalData from "../TotalData";
-import HumanizeNumber from "utils/humanize-number";
+import MeetingDropdown from "../MeetingDropdown";
+
 
 // query getSessionSummaryData($projectId: String!, $sessionId: String! )
 
@@ -23,6 +25,7 @@ const GET_SESSION_SUMMARY_DATA = gql`
             meetings {
               totalCount
               resources {
+                meetingId
                 createdAt
                 destroyedAt
                 publisherMinutes
@@ -61,20 +64,18 @@ const usageBreakdownColumn: ColDef[] = [
   { field: "minutes", headerName: "MINUTES", width: 150 },
 ];
 
-export function SessionSummaryQuery({
-  apiKey,
-  sessionIds,
-}: {
+interface SessionSummaryQueryProps {
   apiKey: string;
   sessionIds: string[];
-}) {
+}
+
+export function SessionSummaryQuery({ apiKey, sessionIds, }: SessionSummaryQueryProps) {
   const { loading, data } = useQuery(GET_SESSION_SUMMARY_DATA, {
     variables: { projectId: apiKey, sessionId: sessionIds },
   });
-  const classes = useStyles();
-  if (loading) {
-    return <p>Loading ...</p>;
-  }
+
+  if (loading) return <p>Loading ...</p>;
+
   const resources = get(data, "project.sessionData.sessions.resources", []);
   if (resources && resources[0].meetings) {
     let meetings = get(resources[0], "meetings.resources", []);
@@ -97,32 +98,48 @@ export function SessionSummaryQuery({
         )
       );
     }
+
     return (
       <>
-        <p>
-          <b>ADVANCED INSIGHTS SUMMARY</b>
-        </p>
+        {/** HEADER SECTION */}
         <Box
           display="flex"
           alignItems="flex-start"
           justifyContent="space-between"
         >
-          <p>
-            {sessionIds[0]}
-          </p>
           <Box>
-            <p>
-              <strong>Session Created: &nbsp;</strong>
-              {
-                DateTime.fromISO(meetings[0].createdAt).toLocaleString(DateTime.DATETIME_MED)
-              }
-            </p>
-            <p>
-              <strong>Destroyed Created: &nbsp;</strong>
-              {
-                DateTime.fromISO(meetings[meetings.length - 1].destroyedAt).toLocaleString(DateTime.DATETIME_MED)
-              }
-            </p>
+            <b>ADVANCED INSIGHTS SUMMARY</b>
+            <br />
+            {sessionIds[0]}
+            <br />
+            <Box
+              display="flex"
+              alignItems="flex-start"
+            >
+              <Box mr={2}>
+                <p>
+                  <strong>Meeting Created: &nbsp;</strong>
+                  {
+                    DateTime.fromISO(meetings[0].createdAt).toLocaleString(DateTime.DATETIME_MED)
+                  }
+                </p>
+              </Box>
+              <p>
+                <strong>Meeting Destroyed: &nbsp;</strong>
+                {
+                  DateTime.fromISO(meetings[0].destroyedAt).toLocaleString(DateTime.DATETIME_MED)
+                }
+              </p>
+            </Box>
+          </Box>
+          <Box display="flex">
+            <Box mr={2}>
+              <MeetingDropdown meetings={meetings} />
+            </Box>
+
+            <button className="Vlt-btn Vlt-btn--primary Vlt-btn--app Vlt-btn--outline">
+              View Inspector
+            </button>
           </Box>
         </Box>
 
