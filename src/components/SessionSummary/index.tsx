@@ -10,14 +10,14 @@ import { Box } from "@material-ui/core";
 
 function SessionSummary() {
   const { apiKey } = useSession();
-  const { sessionIds, startTime, endTime } = useSearch();
+  const { sessionIds, startTime, endTime, meetingId } = useSearch();
   return (
     <Card>
       <Card.Content>
           <span>
             {(apiKey && sessionIds && sessionIds.length)
               ? <SessionSummaryQuery apiKey={apiKey} sessionIds={sessionIds} 
-              startTime={startTime} endTime={endTime}  />
+              startTime={startTime} endTime={endTime}  meetingId={meetingId}/>
               : "No session Selected"}
           </span>
       </Card.Content>

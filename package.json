@@ -12,7 +12,7 @@
     "@testing-library/user-event": "^12.1.10",
     "@types/jest": "^26.0.15",
     "@types/lodash": "^4.14.168",
-    "@types/luxon": "^1.25.1",
+    "@types/luxon": "^1.26.2",
     "@types/node": "^12.0.0",
     "@types/react": "^16.9.53",
     "@types/react-datepicker": "^3.1.3",
@@ -23,7 +23,7 @@
     "fetch": "^1.1.0",
     "graphql": "^15.5.0",
     "lodash": "^4.17.20",
-    "luxon": "^1.25.0",
+    "luxon": "^1.26.0",
     "opentok-jwt": "^0.1.4",
     "react": "^17.0.1",
     "react-apexcharts": "^1.3.7",
@@ -31,7 +31,7 @@
     "react-dom": "^17.0.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",
-    "typescript": "^4.0.3",
+    "typescript": "^4.2.3",
     "web-vitals": "^0.2.4"
   },
   "scripts": {

@@ -104,26 +104,23 @@ interface SessionSummaryQueryProps {
   sessionIds: string[];
   startTime: DateTime;
   endTime: DateTime;
+  meetingId?: string;
 }
 
 export function SessionSummaryQuery({ apiKey, sessionIds, startTime,
-    endTime}: SessionSummaryQueryProps) {
-  const [selectedMeeting, setSelectedMeeting] = useState<any>({ value: null, label: "View All Meetings"});
+    endTime, meetingId}: SessionSummaryQueryProps) {
+  // const [selectedMeeting, setSelectedMeeting] = useState<any>({ value: null, label: "View All Meetings"});
   let queryToUse = GET_SESSION_SUMMARY_DATA;
-  const {value: selectedMeetingId} = selectedMeeting;
-  if (selectedMeetingId) {
+  // const {value: selectedMeetingId} = selectedMeeting;
+  console.log("selectedMeetingId", meetingId)
+  if (meetingId) {
     queryToUse = GET_SESSION_SUMMARY_DATA_BY_MEETING;
   }
-  console.log('SessionSummaryQuery - Render', {apiKey, sessionIds, startTime,
-    endTime})
   const { loading, data } = useQuery(queryToUse, {
-    variables: { projectId: apiKey, sessionId: sessionIds, startTime, endTime, meetingId: selectedMeetingId },
+    variables: { projectId: apiKey, sessionId: sessionIds, startTime, endTime, meetingId },
   });
 
   if (loading) return <p>Loading ...</p>;
-  function handleMeetingChange (item: Record<string, any>) {
-    setSelectedMeeting(item);
-  }
 
   const resources = get(data, "project.sessionData.sessions.resources", []);
   
@@ -154,6 +151,8 @@ export function SessionSummaryQuery({ apiKey, sessionIds, startTime,
       );
     }
 
+
+
     return (
       <>
         {/** HEADER SECTION */}
@@ -175,7 +174,8 @@ export function SessionSummaryQuery({ apiKey, sessionIds, startTime,
                 <p>
                   <strong>Meeting Created: &nbsp;</strong>
                   {
-                    DateTime.fromISO(meetings[0].createdAt).toLocaleString(DateTime.DATETIME_MED)
+                    DateTime.fromISO(meetings[0].createdAt).toLocaleString(DateTime.TIME_24_SIMPLE)
+                    
                   }
                 </p>
               </Box>
@@ -183,6 +183,7 @@ export function SessionSummaryQuery({ apiKey, sessionIds, startTime,
                 <strong>Meeting Destroyed: &nbsp;</strong>
                 {
                   DateTime.fromISO(meetings[0].destroyedAt).toLocaleString(DateTime.DATETIME_MED)
+                  
                 }
               </p>
             </Box>

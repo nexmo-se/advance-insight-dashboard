@@ -26,6 +26,7 @@ const GET_USAGE_TIMELINE_DATA = gql`
                     createdAt
                     destroyedAt
                     connectionId
+                    guid
                   }
                 }
               }
@@ -58,7 +59,8 @@ function UsageTimeline({
   sessionIds,
   startTime,
   endTime,
-}: // meetingId, todo uncomment
+  meetingId
+}: 
 UsageTimelineInterface) {
   const { loading, data } = useQuery(GET_USAGE_TIMELINE_DATA, {
     variables: {
@@ -66,7 +68,7 @@ UsageTimelineInterface) {
       sessionId: sessionIds,
       startTime,
       endTime,
-      meetingId: "e52442d5-3009-4220-ae3c-1c6eff61345b",
+      meetingId,
     },
   });
 
@@ -87,19 +89,19 @@ UsageTimelineInterface) {
       const currentPublishers = get(meetings[i], "connections.resources", []);
       // todo this is not doable. We need to filter by meetings
       for (let j = 0; j < currentPublishers.length; j += 1) {
-        const connectionDuraction = roundConnectionTime(
+        const connectionDuration = roundConnectionTime(
           new Date(currentPublishers[j].createdAt).getTime(),
           new Date(currentPublishers[j].destroyedAt).getTime()
         );
-        console.log("connectionDuraction", connectionDuraction);
-        if (connectionDuraction) {
+        console.log("connectionDuration", connectionDuration);
+        if (connectionDuration) {
           const findPublisherIdx = publisherSeries.findIndex(
-            (el: any) => el && el.name === currentPublishers[j].connectionId
+            (el: any) => el && el.name === currentPublishers[j].guid
           );
           if (findPublisherIdx !== -1) {
             // if element exists, just push another data.
             publisherSeries[findPublisherIdx].data.push({
-              x: currentPublishers[j].connectionId,
+              x: currentPublishers[j].guid,
               y: [
                 new Date(currentPublishers[j].createdAt).getTime(),
                 new Date(currentPublishers[j].destroyedAt).getTime(),
@@ -108,10 +110,10 @@ UsageTimelineInterface) {
           } else {
             // push element on the array
             publisherSeries.push({
-              name: currentPublishers[j].connectionId,
+              name: currentPublishers[j].guid,
               data: [
                 {
-                  x: currentPublishers[j].connectionId,
+                  x: currentPublishers[j].guid,
                   y: [
                     new Date(currentPublishers[j].createdAt).getTime(),
                     new Date(currentPublishers[j].destroyedAt).getTime(),
