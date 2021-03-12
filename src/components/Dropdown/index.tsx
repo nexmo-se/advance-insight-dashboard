@@ -39,13 +39,13 @@ function Dropdown ({ value, children, onChange }: DropdownProps) {
                 (child: any) => {
                   return cloneElement(child, {
                     onClick: handleClick,
-                    selected: value.value === child.value
+                    selected: value.value === child.value,
                   });
                 }
               )
             : cloneElement(children, {
               onClick: handleClick,
-              selected: value.value === children.value
+              selected: value.value === children.value,
             })
           }
         </Box>
