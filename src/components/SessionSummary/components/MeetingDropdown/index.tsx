@@ -42,7 +42,7 @@ function MeetingDropdown ({ meetings }: MeetingDropdownProps) {
             const endTime = DateTime.fromISO(meeting.destroyedAt).toLocaleString(DateTime.TIME_24_SIMPLE)
             return (
               <Dropdown.Item
-                key={meeting.meetingId}
+                key={`${meeting.meetingId}-${startTime}`}
                 value={meeting.meetingId}
                 label={`${date} ${startTime}-${endTime}`}
               />
@@ -50,7 +50,7 @@ function MeetingDropdown ({ meetings }: MeetingDropdownProps) {
           }
         )
       }
-      <Dropdown.Item value="view-all-meetings" label="View All Meetings" />
+      <Dropdown.Item value="view-all-meetings" label="View All Meetings" key="view-all-meetings"/>
     </Dropdown>
   )
 }

@@ -14,7 +14,7 @@ function Item ({ selected = false, value, label, onClick }: ItemProps) {
   function handleClick (e: MouseEvent<HTMLDivElement>) {
     if (onClick) onClick({ value, label })
   }
-
+  
   return (
     <Box
       className={
