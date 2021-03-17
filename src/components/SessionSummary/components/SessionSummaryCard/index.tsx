@@ -109,9 +109,7 @@ interface SessionSummaryQueryProps {
 
 export function SessionSummaryQuery({ apiKey, sessionIds, startTime,
     endTime, meetingId}: SessionSummaryQueryProps) {
-  // const [selectedMeeting, setSelectedMeeting] = useState<any>({ value: null, label: "View All Meetings"});
   let queryToUse = GET_SESSION_SUMMARY_DATA;
-  // const {value: selectedMeetingId} = selectedMeeting;
   console.log("selectedMeetingId", meetingId)
   if (meetingId) {
     queryToUse = GET_SESSION_SUMMARY_DATA_BY_MEETING;
