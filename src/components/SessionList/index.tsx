@@ -1,7 +1,6 @@
 import IconPath from "@vonagevolta/volta2/dist/symbol/volta-icons.svg";
 
 import clsx from "clsx";
-import { DateTime } from "luxon";
 import { MouseEvent } from "react";
 
 import useStyles from "./styles";
@@ -9,11 +8,11 @@ import { useSessionData } from "./hooks/session-data";
 import { useSession } from "components/SessionProvider";
 import { useSearch } from "components/SearchAndFilter";
 
+import SessionItem from "./components/SessionItem";
 import Card from "components/Card";
 import { Box } from "@material-ui/core";
 
 function SessionList() {
-  // const [data, setData] = useState<SessionData[]>([]);
   const { apiKey } = useSession();
   const { startTime, endTime } = useSearch();
   const { loading, error, sessions, endCursor, fetchMore } = useSessionData({
@@ -59,40 +58,16 @@ function SessionList() {
                   <th>DESTROYED AT</th>
                   <th>CONNECTIONS</th>
                   <th>PUBLISHED MINUTES</th>
-                  <th>SUBSCRIBED MINUTES</th>
-                  <th>QUALITY (MOS)</th>
+                  <th>SUBSCRIBED MINUTES</th>                  
                 </tr>
               </thead>
               <tbody>
                 {
                   sessions.map((sessionData) => (
-                    <tr key={sessionData.id}>
-                      <td className={mStyles.tableCell}>
-                        {sessionData.id}
-                      </td>
-                      <td className="Vlt-table__cell--nowrap">
-                        {
-                          sessionData.createdAt? sessionData.createdAt.toLocaleString(DateTime.DATETIME_MED_WITH_SECONDS): "-"
-                        }
-                      </td>
-                      <td className="Vlt-table__cell--nowrap">
-                        {
-                          sessionData.destroyedAt? sessionData.destroyedAt.toLocaleString(DateTime.DATETIME_MED_WITH_SECONDS): "-"
-                        }
-                      </td>
-                      <td className="Vlt-table__cell--number">
-                        {sessionData.connections}
-                      </td>
-                      <td className="Vlt-table__cell--number">
-                        {sessionData.publishedMinutes}
-                      </td>
-                      <td className="Vlt-table__cell--number">
-                        {sessionData.subscribedMinutes}
-                      </td>
-                      <td className="Vlt-table__cell--number">
-                        {sessionData.quality}
-                      </td>
-                    </tr>
+                    <SessionItem
+                      key={sessionData.id}
+                      sessionData={sessionData}
+                    />
                   ))
                 }
 

@@ -1,7 +1,9 @@
 import "react-datepicker/dist/react-datepicker.css";
 
-import { useState, useEffect } from "react";
 import { DateTime } from "luxon";
+
+import { useState, useEffect } from "react";
+import { useSearch } from "../../hooks/search";
 
 import { MouseEvent } from "react";
 import { SaveClickEvent } from "components/SearchAndFilter/types";
@@ -19,8 +21,14 @@ interface ISearchCard {
 function SearchCard({ onSaveClick }: ISearchCard) {
   const [saving, setSaving] = useState<boolean>(false);
   const [sessionIds, setSessionIds] = useState<string[]>([]);
-  const [startTime, setStartTime] = useState<DateTime>(DateTime.local().minus({ day: 7 }));
+  const [startTime, setStartTime] = useState<DateTime>(DateTime.local().minus({ day: 21 }));
   const [endTime, setEndTime] = useState<DateTime>(DateTime.local());
+  
+  /**
+   * The sessionIds in the `useState` is not linked directly inside the Hooks
+   * We need to update it manually here once the sessionIds change
+   */
+  const { sessionIds: selectedSessionIds } = useSearch();
 
   function handleSessionIdsChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
     const values = e.target.value.split(",");
@@ -53,6 +61,13 @@ function SearchCard({ onSaveClick }: ISearchCard) {
       setEndTime(DateTime.local());
     },
     [setStartTime, setEndTime]
+  );
+
+  useEffect(
+    () => {
+      if (selectedSessionIds) setSessionIds(selectedSessionIds);
+    },
+    [selectedSessionIds]
   )
 
   return (
