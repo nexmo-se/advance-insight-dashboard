@@ -2,9 +2,6 @@ import { useSession } from "components/SessionProvider";
 import { useSearch } from "components/SearchAndFilter";
 import { SessionSummaryQuery } from "./components/SessionSummaryCard";
 import Card from "components/Card";
-import Button from "components/Button";
-
-import { Box } from "@material-ui/core";
 
 // Assumptions: this component handles one session at a time.
 
