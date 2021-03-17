@@ -9,8 +9,8 @@ import { Box, Grid } from "@material-ui/core";
 import { DataGrid, ColDef } from "@material-ui/data-grid";
 
 import TotalData from "../TotalData";
+import QuickQualityView from "../QuickQualityView";
 import MeetingDropdown from "../MeetingDropdown";
-
 
 // query getSessionSummaryData($projectId: String!, $sessionId: String! )
 
@@ -221,9 +221,7 @@ export function SessionSummaryQuery({ apiKey, sessionIds, }: SessionSummaryQuery
 
           <Grid xs={6} item>
             {/* Session Quality */}
-            <Box display="flex" flexDirection="column">
-              <h3>Quality</h3>
-            </Box>
+            <QuickQualityView />
           </Grid>
         </Grid>
       </>
