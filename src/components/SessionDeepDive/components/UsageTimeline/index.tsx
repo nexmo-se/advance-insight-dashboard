@@ -156,18 +156,26 @@ UsageTimelineInterface) {
             horizontal: true,
           },
         },
-        dataLabels:{
-          enabled: true,
-          formatter: function(val: any) {
-            /* var interval =  Interval.fromDateTimes(DateTime.fromMillis(val[0]), DateTime.fromMillis(val[1]));
-            console.log("dataLabel", Math.round(interval.toDuration(['minutes']).as('minutes')));
-            return Math.round(interval.toDuration(['minutes']).as('minutes')) + 'Minutes'; */
-          }
+        tooltip: {
+            y: {
+                formatter: function(value: any, { series, seriesIndex, dataPointIndex, w }: any) {
+                  return 'ConnectionTime:';
+                }
+            },
+            x: {
+                formatter: function(value: any, series: any) {
+                  if (isNaN(value)) {
+                    return '';
+                  }
+                  return DateTime.fromMillis(value).toLocaleString(DateTime.TIME_SIMPLE)
+                }
+            }
         },
         colors: ['#80c7f5', '#871fff', '#fa7454', '#d6219c', '#616266', '#335062','#3298c4'],
         yaxis: {
           min: new Date(meetings[0].createdAt).getTime(),
           max: new Date(meetings[meetings.length - 1].destroyedAt).getTime(),
+
         },
         xaxis: {
           type: "datetime",
