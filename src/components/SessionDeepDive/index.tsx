@@ -38,7 +38,7 @@ function SessionDeepDive() {
                   startTime={startTime}
                   endTime={endTime}
                   meetingId={meetingId} 
-                ></UsageTimeline> : "Please select a meeting to display the graph"} 
+                ></UsageTimeline> : <p><b>Please select a meeting to display the graph</b></p>} 
               </AccordionDetails>
             </Accordion>
           </Card.Content>

@@ -1,7 +1,7 @@
 import { useQuery, gql } from "@apollo/client";
 import { get } from "lodash";
 import ReactApexChart from "react-apexcharts";
-import { DateTime, Duration, Interval } from "luxon";
+import { DateTime } from "luxon";
 
 const GET_USAGE_TIMELINE_DATA = gql`
   query getUsageTimeline(
@@ -38,12 +38,23 @@ const GET_USAGE_TIMELINE_DATA = gql`
   }
 `;
 
+function queryError() {
+    return (
+        <div className="Vlt-callout Vlt-callout--critical">
+        <i></i>
+        <div className="Vlt-callout__content">
+            <p>There was a problem with retrieving the data, please try again.</p>
+        </div>
+        </div>
+    )
+}
+
 function roundConnectionTime(startDate: number, endDate: number): number {
   if (!startDate || !endDate) {
     return 0;
   }
   const computedMinutes = Math.round((endDate - startDate) / 1000 / 60);
-  return computedMinutes ? computedMinutes : 0;
+  return computedMinutes ? computedMinutes : 1; // If connection time is less than one minute, I round up to 1 minute
 }
 
 interface UsageTimelineInterface {
@@ -62,7 +73,7 @@ function UsageTimeline({
   meetingId
 }: 
 UsageTimelineInterface) {
-  const { loading, data } = useQuery(GET_USAGE_TIMELINE_DATA, {
+  const { loading, data, error } = useQuery(GET_USAGE_TIMELINE_DATA, {
     variables: {
       projectId: apiKey,
       sessionId: sessionIds,
@@ -73,11 +84,20 @@ UsageTimelineInterface) {
   });
 
   if (loading) {
-    return <p>Loading...</p>;
+    return (<div>
+        <div className="Vlt-spinner"></div>
+        <p>Loading ...</p>
+        </div>);
   }
+  if (error) {
+    return queryError();
+  } 
   const resources = get(data, "project.sessionData.sessions.resources", []);
   if (resources && resources.length && resources[0].meetings) {
     let meetings = get(resources[0], "meetings.resources", []);
+    if (!meetings.length) {
+        return <p>There are no available meetings for this session</p>;
+    }
     console.log("[UsageTimeline] - Meetings", meetings)
     let publisherSeries: any = []; /*  {name: 'Joe',
                                     data: [{
@@ -93,14 +113,15 @@ UsageTimelineInterface) {
           new Date(currentPublishers[j].createdAt).getTime(),
           new Date(currentPublishers[j].destroyedAt).getTime()
         );
+        const pubGuid = currentPublishers[j].guid ? currentPublishers[j].guid : `Anonymous-${Math.random().toString(36).substring(7)}`
         if (connectionDuration) {
           const findPublisherIdx = publisherSeries.findIndex(
-            (el: any) => el && el.name === currentPublishers[j].guid
+            (el: any) => el && el.name === pubGuid
           );
           if (findPublisherIdx !== -1) {
             // if element exists, just push another data.
             publisherSeries[findPublisherIdx].data.push({
-              x: currentPublishers[j].guid,
+              x: pubGuid,
               y: [
                 new Date(currentPublishers[j].createdAt).getTime(),
                 new Date(currentPublishers[j].destroyedAt).getTime(),
@@ -109,10 +130,10 @@ UsageTimelineInterface) {
           } else {
             // push element on the array
             publisherSeries.push({
-              name: currentPublishers[j].guid,
+              name: pubGuid,
               data: [
                 {
-                  x: currentPublishers[j].guid,
+                  x: pubGuid,
                   y: [
                     new Date(currentPublishers[j].createdAt).getTime(),
                     new Date(currentPublishers[j].destroyedAt).getTime(),

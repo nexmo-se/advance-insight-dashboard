@@ -111,7 +111,11 @@ export default function SessionTotalData({ apiKey, sessionIds, startTime,
             variables: { projectId: apiKey, sessionId: sessionIds, startTime, endTime, meetingId },
           });
         
-          if (loading) return <p>Loading ...</p>;
+          if (loading) return (<div>
+            <div className="Vlt-spinner"></div>
+            <p>Loading ...</p>
+            </div>);
+          if (error) return <p>There was an error retrieving the data</p>
         
           const resources = get(data, "project.sessionData.sessions.resources", []);
           
