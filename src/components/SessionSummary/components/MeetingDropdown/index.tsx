@@ -20,7 +20,6 @@ function MeetingDropdown ({ meetings }: MeetingDropdownProps) {
 
   useEffect(
     () => {
-        console.log("useSearch", selectedMeeting)
       if (selectedMeeting.value === "view-all-meeting") {
         setMeetingId(undefined);
       } else {
