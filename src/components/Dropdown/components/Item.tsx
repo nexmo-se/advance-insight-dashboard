@@ -7,6 +7,7 @@ interface ItemProps {
   selected?: boolean;
   value: string;
   label?: string;
+  key?: string;
   onClick?: (item: any) => void;
 }
 
@@ -24,6 +25,7 @@ function Item ({ selected = false, value, label, onClick }: ItemProps) {
         })
       }
       onClick={handleClick}
+      
     >
       { label? label: value }
     </Box>
