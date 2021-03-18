@@ -8,6 +8,7 @@ import Card from "components/Card";
 function SessionSummary() {
   const { apiKey } = useSession();
   const { sessionIds, startTime, endTime, meetingId } = useSearch();
+  console.log("[SessionSummary] - meeting", meetingId)
   return (
     <Card>
       <Card.Content>
