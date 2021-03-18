@@ -111,9 +111,9 @@ export function SessionSummaryQuery({ apiKey, sessionIds, startTime,
     endTime, meetingId}: SessionSummaryQueryProps) {
   let queryToUse = GET_SESSION_SUMMARY_DATA;
   console.log("selectedMeetingId", meetingId)
-  if (meetingId) {
+  /* if (meetingId) {
     queryToUse = GET_SESSION_SUMMARY_DATA_BY_MEETING;
-  }
+  } */
   const { loading, data } = useQuery(queryToUse, {
     variables: { projectId: apiKey, sessionId: sessionIds, startTime, endTime, meetingId },
   });
@@ -125,6 +125,7 @@ export function SessionSummaryQuery({ apiKey, sessionIds, startTime,
   if (resources && resources.length && resources[0].meetings) {
     console.log("[SessionSummaryCard] - resources", resources[0].meetings)
     let meetings = get(resources[0], "meetings.resources", []);
+    let dropdownMeetings = meetings.slice();
     let totalConnections = 0;
     let totalPublishers = 0;
     let totalSubscribers = 0;
@@ -188,7 +189,7 @@ export function SessionSummaryQuery({ apiKey, sessionIds, startTime,
           </Box>
           <Box display="flex">
             <Box mr={2}>
-              <MeetingDropdown meetings={meetings} />
+              <MeetingDropdown meetings={dropdownMeetings} />
             </Box>
 
             <button className="Vlt-btn Vlt-btn--primary Vlt-btn--app Vlt-btn--outline">
