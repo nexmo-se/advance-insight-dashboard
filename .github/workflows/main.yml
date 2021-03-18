@@ -16,4 +16,4 @@ jobs:
           heroku_app_name: "ot-ai-dashboard" #Must be unique in Heroku
           heroku_email: "enrico.portolan@vonage.com"
       - name: Run build complete
-      run: echo successfully build    
+        run: echo successfully build    
