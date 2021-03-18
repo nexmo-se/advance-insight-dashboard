@@ -78,7 +78,7 @@ UsageTimelineInterface) {
   const resources = get(data, "project.sessionData.sessions.resources", []);
   if (resources && resources.length && resources[0].meetings) {
     let meetings = get(resources[0], "meetings.resources", []);
-    console.log("meetings", meetings);
+    console.log("[UsageTimeline] - Meetings", meetings)
     let publisherSeries: any = []; /*  {name: 'Joe',
                                     data: [{
                                     x: 'Design',
@@ -93,7 +93,6 @@ UsageTimelineInterface) {
           new Date(currentPublishers[j].createdAt).getTime(),
           new Date(currentPublishers[j].destroyedAt).getTime()
         );
-        console.log("connectionDuration", connectionDuration);
         if (connectionDuration) {
           const findPublisherIdx = publisherSeries.findIndex(
             (el: any) => el && el.name === currentPublishers[j].guid
@@ -144,6 +143,7 @@ UsageTimelineInterface) {
             return Math.round(interval.toDuration(['minutes']).as('minutes')) + 'Minutes'; */
           }
         },
+        colors: ['#80c7f5', '#871fff', '#fa7454', '#d6219c', '#616266', '#335062','#3298c4'],
         yaxis: {
           min: new Date(meetings[0].createdAt).getTime(),
           max: new Date(meetings[meetings.length - 1].destroyedAt).getTime(),

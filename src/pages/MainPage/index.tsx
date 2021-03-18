@@ -33,7 +33,7 @@ function MainPage() {
         </Grid>
         <Grid spacing={2} container item>
           <Grid xs={12} item>
-            {/* <SessionDeepDive></SessionDeepDive> */}
+            <SessionDeepDive></SessionDeepDive>
           </Grid>
         </Grid>
       </SearchAndFilter>

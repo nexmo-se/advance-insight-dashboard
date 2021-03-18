@@ -7,15 +7,14 @@ import Card from "components/Card";
 
 function SessionSummary() {
   const { apiKey } = useSession();
-  const { sessionIds, startTime, endTime, meetingId } = useSearch();
-  console.log("[SessionSummary] - meeting", meetingId)
+  const { sessionIds, startTime, endTime } = useSearch();
   return (
     <Card>
       <Card.Content>
           <span>
             {(apiKey && sessionIds && sessionIds.length)
               ? <SessionSummaryQuery apiKey={apiKey} sessionIds={sessionIds} 
-              startTime={startTime} endTime={endTime}  meetingId={meetingId}/>
+              startTime={startTime} endTime={endTime}  />
               : "No session Selected"}
           </span>
       </Card.Content>

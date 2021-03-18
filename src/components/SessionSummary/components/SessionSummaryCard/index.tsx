@@ -11,6 +11,8 @@ import { DataGrid, ColDef } from "@material-ui/data-grid";
 import TotalData from "../TotalData";
 import QuickQualityView from "../QuickQualityView";
 import MeetingDropdown from "../MeetingDropdown";
+import SessionTotalData from "../SessionTotalData";
+import { useSearch } from "components/SearchAndFilter";
 
 // query getSessionSummaryData($projectId: String!, $sessionId: String! )
 
@@ -108,14 +110,11 @@ interface SessionSummaryQueryProps {
 }
 
 export function SessionSummaryQuery({ apiKey, sessionIds, startTime,
-    endTime, meetingId}: SessionSummaryQueryProps) {
+    endTime}: SessionSummaryQueryProps) {
   let queryToUse = GET_SESSION_SUMMARY_DATA;
-  console.log("selectedMeetingId", meetingId)
-  /* if (meetingId) {
-    queryToUse = GET_SESSION_SUMMARY_DATA_BY_MEETING;
-  } */
-  const { loading, data } = useQuery(queryToUse, {
-    variables: { projectId: apiKey, sessionId: sessionIds, startTime, endTime, meetingId },
+  const { meetingId } = useSearch();
+  const { loading, data, error } = useQuery(queryToUse, {
+    variables: { projectId: apiKey, sessionId: sessionIds, startTime, endTime },
   });
 
   if (loading) return <p>Loading ...</p>;
@@ -123,18 +122,17 @@ export function SessionSummaryQuery({ apiKey, sessionIds, startTime,
   const resources = get(data, "project.sessionData.sessions.resources", []);
   
   if (resources && resources.length && resources[0].meetings) {
-    console.log("[SessionSummaryCard] - resources", resources[0].meetings)
     let meetings = get(resources[0], "meetings.resources", []);
     let dropdownMeetings = meetings.slice();
-    let totalConnections = 0;
+/*     let totalConnections = 0;
     let totalPublishers = 0;
     let totalSubscribers = 0;
-    let meetingsData = [];
+    let meetingsData = []; */
     if (!meetings.length) {
         return <p>There are not meetings for this session</p>;
     }
     // todo it could happen that meetings has 0 entry - need to change the createdAt
-    for (let i = 0; i < meetings.length; i += 1) {
+    /* for (let i = 0; i < meetings.length; i += 1) {
       totalConnections += meetings[i].connections.totalCount;
       totalPublishers += meetings[i].publishers.totalCount;
       totalSubscribers += meetings[i].subscribers.totalCount;
@@ -148,7 +146,7 @@ export function SessionSummaryQuery({ apiKey, sessionIds, startTime,
           )
         )
       );
-    }
+    } */
 
 
 
@@ -197,88 +195,8 @@ export function SessionSummaryQuery({ apiKey, sessionIds, startTime,
             </button>
           </Box>
         </Box>
-
-        <Grid spacing={2} container>
-          <Grid xs={6} item>
-          {/* Session Summary */}
-            <Box
-              display="flex"
-              mt={2}
-              flexDirection="column"
-            >
-              <Grid spacing={2} container>
-                <Grid xs={7} item>
-                  <TotalData
-                    type="minutes"
-                    total={
-                      HumanizeNumber.humanize({
-                        number: Math.round(
-                          resources[0].publisherMinutes +
-                          resources[0].subscriberMinutes
-                        )
-                      })
-                    }
-                    breakdown={[
-                      {
-                        title: "Publisher Min: ",
-                        value: HumanizeNumber.humanize({
-                          number: Math.round(resources[0].publisherMinutes)
-                        })
-                      },
-                      {
-                        title: "Subscriber Min: ",
-                        value: HumanizeNumber.humanize({
-                          number: Math.round(resources[0].subscriberMinutes)
-                        })
-                      }
-                    ]}
-                  />
-                </Grid>
-                <Grid xs={5} item>
-                  <TotalData
-                    type="connections"
-                    total={totalConnections}
-                    breakdown={[
-                      {
-                        title: "Publishers: ",
-                        value: totalPublishers
-                      },
-                      {
-                        title: "Subscribers",
-                        value: totalSubscribers
-                      }
-                    ]}
-                  />
-                </Grid>
-              </Grid>
-              <Box
-                display="flex"
-                flexDirection="column"
-                mt={2}
-              >
-                <Box>
-                  <p>
-                    <b>Usage Breakdown</b>
-                  </p>
-                </Box>
-                <Box display="flex" style={{ width: "100%" }}>
-                  <DataGrid
-                    rows={meetingsData}
-                    columns={usageBreakdownColumn}
-                    pageSize={3}
-                    density="compact"
-                    autoHeight={true}
-                  />
-                </Box>
-              </Box>
-            </Box>
-          </Grid>
-
-          <Grid xs={6} item>
-            {/* Session Quality */}
-            <QuickQualityView />
-          </Grid>
-        </Grid>
+        <SessionTotalData apiKey={apiKey} sessionIds={sessionIds} 
+              startTime={startTime} endTime={endTime} meetingId={meetingId}></SessionTotalData>        
       </>
     );
   }
