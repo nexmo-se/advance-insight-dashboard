@@ -26,7 +26,7 @@ function QualityItem ({ label, value }: QualityItemProps) {
             clsx("p-large", "Vlt-orange", mStyles.noMargin)
           }
         >
-          {value}
+          {<strong>{value}</strong>}
         </p>
       </Grid>
     </Grid>
