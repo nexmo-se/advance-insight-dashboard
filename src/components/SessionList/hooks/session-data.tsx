@@ -51,6 +51,8 @@ interface ListSessionSummaryOptions {
 }
 
 export function useSessionData ({ apiKey, startTime, endTime }: SessionDataOptions) {
+  console.log(startTime, endTime);
+
   const [sessions, setSessions] = useState<SessionData[]>([]);
   const [endCursor, setEndCursor] = useState<string | undefined>();
   const { loading, error, data, fetchMore } = useQuery<any, ListSessionSummaryOptions>(LIST_SESSION_SUMMARY, {
