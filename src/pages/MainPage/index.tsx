@@ -1,15 +1,13 @@
 import { useState } from "react";
+import { useAppApolloClient } from '../../auth/apolloAuth';
 
 import Page from "components/Page";
 import SearchAndFilter from "components/SearchAndFilter";
-
-import { Grid } from "@material-ui/core";
-import Card from "components/Card";
-import {useAppApolloClient} from '../../auth/apolloAuth';
-import { ApolloProvider } from "@apollo/client";
 import SessionSummary from "components/SessionSummary";
 import SessionList from "components/SessionList";
 import SessionDeepDive from "components/SessionDeepDive"
+import { Grid } from "@material-ui/core";
+import { ApolloProvider } from "@apollo/client";
 
 function MainPage() {
   const [container, setContainer] = useState<any>(null);

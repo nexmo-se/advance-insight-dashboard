@@ -1,7 +1,6 @@
 import IconPath from "@vonagevolta/volta2/dist/symbol/volta-icons.svg";
 
 import clsx from "clsx";
-import { MouseEvent } from "react";
 
 import useStyles from "./styles";
 import { useSessionData } from "./hooks/session-data";
@@ -15,7 +14,7 @@ import { Box } from "@material-ui/core";
 function SessionList() {
   const { apiKey } = useSession();
   const { startTime, endTime } = useSearch();
-  const { loading, error, sessions, endCursor, fetchMore } = useSessionData({
+  const { loading, error, sessions } = useSessionData({
     apiKey,
     startTime,
     endTime
@@ -23,15 +22,15 @@ function SessionList() {
   const mStyles = useStyles();
 
   // TODO: `fetchMore` is still not working. I have no idea why everytime it fetch more, it fetches the original item again.
-  function handleLoadMoreClick (e: MouseEvent<HTMLDivElement>) {
-    if (endCursor) {
-      fetchMore({
-        variables: {
-          endCursor
-        }
-      });
-    }
-  }
+  // function handleLoadMoreClick (e: MouseEvent<HTMLDivElement>) {
+  //   if (endCursor) {
+  //     fetchMore({
+  //       variables: {
+  //         endCursor
+  //       }
+  //     });
+  //   }
+  // }
 
   if (loading) return <>Loading...</>
   else if (error) return <>Error...</>
