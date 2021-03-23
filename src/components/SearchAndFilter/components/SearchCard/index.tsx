@@ -24,10 +24,8 @@ function SearchCard({ onSaveClick }: ISearchCard) {
   const [startTime, setStartTime] = useState<DateTime>(DateTime.local().minus({ day: 21 }));
   const [endTime, setEndTime] = useState<DateTime>(DateTime.local());
   
-  /**
-   * The sessionIds in the `useState` is not linked directly inside the Hooks
-   * We need to update it manually here once the sessionIds change
-   */
+  // The sessionIds in the `useState` is not linked directly inside the Hooks
+  // We need to update it manually here once the sessionIds change
   const { sessionIds: selectedSessionIds } = useSearch();
 
   function handleSessionIdsChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
@@ -35,15 +33,15 @@ function SearchCard({ onSaveClick }: ISearchCard) {
     setSessionIds(values);
   }
 
-  function handleStartTimeChange(startTime: Date) {
+  function handleStartTimeChange (startTime: Date) {
     setStartTime(DateTime.fromJSDate(startTime));
   }
 
-  function handleEndTimeChange(endTime: Date) {
+  function handleEndTimeChange (endTime: Date) {
     setEndTime(DateTime.fromJSDate(endTime));
   }
 
-  async function handleSaveClick(e: MouseEvent<HTMLButtonElement>) {
+  async function handleSaveClick (e: MouseEvent<HTMLButtonElement>) {
     setSaving(true);
     if (onSaveClick) onSaveClick({ sessionIds, startTime, endTime });
 
@@ -54,14 +52,6 @@ function SearchCard({ onSaveClick }: ISearchCard) {
     })
     setSaving(false);
   }
-
-  useEffect(
-    () => {
-      setStartTime(DateTime.local().minus({ day: 7 }));
-      setEndTime(DateTime.local());
-    },
-    [setStartTime, setEndTime]
-  );
 
   useEffect(
     () => {

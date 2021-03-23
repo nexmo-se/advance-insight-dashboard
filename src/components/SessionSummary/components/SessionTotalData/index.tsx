@@ -4,7 +4,7 @@ import HumanizeNumber from "utils/humanize-number";
 import { get } from "lodash";
 import { useQuery, gql } from "@apollo/client";
 import { Box, Grid } from "@material-ui/core";
-import { DataGrid, ColDef } from "@material-ui/data-grid";
+import { DataGrid, GridColDef } from "@material-ui/data-grid";
 import TotalData from "../TotalData";
 import QuickQualityView from "../QuickQualityView";
 
@@ -93,7 +93,7 @@ interface SessionSummaryQueryProps {
     return { id, group: id + 1, publishers, subscribers, minutes };
   }
   
-  const usageBreakdownColumn: ColDef[] = [
+  const usageBreakdownColumn: GridColDef[] = [
     { field: "group", headerName: "GROUP", width: 100 },
     { field: "publishers", headerName: "PUBLISHERS", width: 150 },
     { field: "subscribers", headerName: "SUBSCRIBERS", width: 150 },
