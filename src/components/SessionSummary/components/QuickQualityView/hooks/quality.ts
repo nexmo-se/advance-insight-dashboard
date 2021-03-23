@@ -166,8 +166,8 @@ export function useQuality () {
       const generateMosList = (stats: (AudioStreamValue[] | VideoStreamValue[])) => {
         return stats.map(
           (stat: (AudioStreamValue | VideoStreamValue)) => {
-            if ((<VideoStreamValue>stat).resolution) {
-              const videoStat = (<VideoStreamValue>stat);
+            if ((stat as VideoStreamValue).resolution) {
+              const videoStat = stat as VideoStreamValue;
               return videoMOS(videoStat.resolution, (videoStat.bitrate * 8) * 1000);
             } else {
               return audioMOS(stat.latency, stat.packetLoss)
@@ -202,7 +202,7 @@ export function useQuality () {
       }
       return quality
     },
-    []
+    [audioMOS, videoMOS]
   )
 
 
@@ -241,7 +241,7 @@ export function useQuality () {
         audio: audioQuality
       })
     },
-    [data]
+    [data, generateQuality, normaliseStats]
   )
 
   return {
