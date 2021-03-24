@@ -1,4 +1,4 @@
-import "react-datepicker/dist/react-datepicker.css";
+import "../../datepicker.css";
 
 import { DateTime } from "luxon";
 
@@ -18,7 +18,7 @@ interface ISearchCard {
   onSaveClick: (args: SaveClickEvent) => void;
 }
 
-function SearchCard({ onSaveClick }: ISearchCard) {
+function SearchCard ({ onSaveClick }: ISearchCard) {
   const [saving, setSaving] = useState<boolean>(false);
   const [sessionIds, setSessionIds] = useState<string[]>([]);
   const [startTime, setStartTime] = useState<DateTime>(DateTime.local().minus({ day: 21 }));
@@ -28,7 +28,7 @@ function SearchCard({ onSaveClick }: ISearchCard) {
   // We need to update it manually here once the sessionIds change
   const { sessionIds: selectedSessionIds } = useSearch();
 
-  function handleSessionIdsChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
+  function handleSessionIdsChange (e: React.ChangeEvent<HTMLTextAreaElement>) {
     const values = e.target.value.split(",");
     setSessionIds(values);
   }

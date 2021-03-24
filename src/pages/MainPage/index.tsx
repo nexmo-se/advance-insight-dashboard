@@ -9,13 +9,13 @@ import SessionDeepDive from "components/SessionDeepDive"
 import { Grid } from "@material-ui/core";
 import { ApolloProvider } from "@apollo/client";
 
-function MainPage() {
+function MainPage () {
   const [container, setContainer] = useState<any>(null);
   const apolloClient = useAppApolloClient();
 
   return (
     <Page>
-        <ApolloProvider client={apolloClient}>
+      <ApolloProvider client={apolloClient}>
       <SearchAndFilter container={container}>
         {/** Put any component based on the seach and filter */}
         <Grid spacing={2} container item>
