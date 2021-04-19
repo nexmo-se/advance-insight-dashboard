@@ -233,8 +233,8 @@ export function useQuality () {
       const videoQuality = generateQuality(videoStats);
       const audioQuality = generateQuality(audioStats);
 
-      console.log(audioStats, videoStats);
-      console.log(audioQuality, videoQuality);
+      // console.log(audioStats, videoStats);
+      // console.log(audioQuality, videoQuality);
 
       setQuality({
         video: videoQuality,

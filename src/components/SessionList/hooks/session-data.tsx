@@ -51,7 +51,7 @@ export function useSessionData () {
   const [endCursor, setEndCursor] = useState<string | undefined>();
   const { apiKey } = useSession();
   const { startTime, endTime } = useSearch();
-  const [fetchData, { loading, error, data, fetchMore }] = useLazyQuery<any, ListSessionSummaryOptions>(LIST_SESSION_SUMMARY, {
+  const [fetchData, { loading, error, data, refetch }] = useLazyQuery<any, ListSessionSummaryOptions>(LIST_SESSION_SUMMARY, {
     variables: {
       projectId: apiKey,
       startTime: startTime.toMillis(),
@@ -59,13 +59,28 @@ export function useSessionData () {
     }
   });
 
+  function loadMore () {
+    if (!refetch) return;
+    if (!endCursor) return;
+    
+    // Since pagination is a bit hard to do
+    // I will use refetch() function with endCursor
+    refetch({
+      projectId: apiKey,
+      startTime: startTime.toMillis(),
+      endTime: endTime.toMillis(),
+      endCursor
+    })
+  }
+
   useEffect(
     () => {
       if (!data) return;
 
-      setEndCursor(data.project.sessionData.sessionSummaries.pageInfo.endCursor);
+      const endCursor = lodash.get(data, "project.sessionData.sessionSummaries.pageInfo.endCursor");
+      setEndCursor(endCursor);
 
-      const { resources: sessionSummaries } = data.project.sessionData.sessionSummaries;
+      const sessionSummaries = lodash.get(data, "project.sessionData.sessionSummaries.resources");
       const sessions = sessionSummaries.map(
         (sessionSummary: any) => {
           const createdAt = lodash.min<number>(
@@ -101,7 +116,14 @@ export function useSessionData () {
           })
         }
       );
-      setSessions(sessions);
+      setSessions(
+        (oldData) => {
+          // Just in case I have duplicate data, remove duplicate data
+          // before passing it to sessions
+          const combinedData = [...oldData, ...sessions];
+          return lodash.uniqBy(combinedData, "id");
+        }
+      );
     },
     [data]
   );
@@ -111,17 +133,19 @@ export function useSessionData () {
       if (!apiKey) return;
       if (!startTime) return;
       if (!endTime) return;
+      if (loading) return;
+
       fetchData();
     },
     [apiKey, startTime, endTime, fetchData]
   );
 
   return {
+    hasNext: !!endCursor,
     loading,
     error,
     sessions,
-    endCursor,
-    fetchMore
+    loadMore
   }
 }
 

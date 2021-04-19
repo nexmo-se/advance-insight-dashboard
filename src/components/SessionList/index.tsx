@@ -1,13 +1,6 @@
 import IconPath from "@vonagevolta/volta2/dist/symbol/volta-icons.svg";
-
-import clsx from "clsx";
-
 import useStyles from "./styles";
-import { useSessionData } from "./hooks/session-data";
-import { useSession } from "components/SessionProvider";
-import { useSearch } from "components/SearchAndFilter";
 
-import SessionItem from "./components/SessionItem";
 import SessionListTable from "./components/SessionListTable";
 import Card from "components/Card";
 import { Box } from "@material-ui/core";
@@ -26,9 +19,6 @@ function SessionList() {
   //   }
   // }
 
-  // if (loading) return <>Loading...</>
-  // else if (error) return <>Error...</>
-  // else {
   return (
     <Card>
       <Card.Header>
