@@ -133,7 +133,6 @@ export function useSessionData () {
       if (!apiKey) return;
       if (!startTime) return;
       if (!endTime) return;
-      if (loading) return;
 
       fetchData();
     },
