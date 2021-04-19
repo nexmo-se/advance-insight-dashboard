@@ -7,14 +7,14 @@ import { Box } from "@material-ui/core";
 
 interface ICard {
   children: any;
-  className?: string[]
+  className?: string[] | string;
 }
 
 function Card({ children, className = []}: ICard) {
   return (
     <Box
       className={
-        clsx("Vlt-card", ...className)
+        clsx("Vlt-card", className)
       }
     >
       {children}
