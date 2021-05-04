@@ -1,7 +1,7 @@
 import clsx from "clsx";
 
 import useStyles from "./styles";
-import { useSessionData } from "../../hooks/session-data";
+import { useSessionList } from "../Provider";
 
 import Spinner from "components/Spinner";
 import SessionItem from "../SessionItem";
@@ -9,7 +9,7 @@ import { Box } from "@material-ui/core";
 
 function SessionListTable () {
   const mStyles = useStyles();
-  const { loading, error, sessions, loadMore, hasNext } = useSessionData();
+  const { loading, error, sessions, loadMore, hasNext } = useSessionList();
 
   if (loading) return <Spinner />
   else if (error) return <span>Error...</span>
