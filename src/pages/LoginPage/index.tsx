@@ -26,48 +26,50 @@ function LoginPage() {
 
   return (
     <Page>
-      <img
-        src={VonageLogo}
-        alt="Vonage Logo"
-        className={mStyles.logoBackground}
-      />
-      <Box
-        className={
-          clsx("Vlt-card", mStyles.card)
-        }
-      >
-        <Box className="Vlt-card__header">
-          <h3>Vonage Video Analytics Dashboard Template</h3>
-        </Box>
+      <div className={mStyles.content}>
+        <img
+          src={VonageLogo}
+          alt="Vonage Logo"
+          className={mStyles.logoBackground}
+        />
         <Box
-          className="Vlt-card__content"
-          display="flex"
+          className={
+            clsx("Vlt-card", mStyles.card)
+          }
         >
-          <Box width="50%">
-            <TextInput
-              label="Project API Key"
-              value={apiKey}
-              onChange={setApiKey}
-            />
-            <TextInput
-              label="Project Secret"
-              type="password"
-              value={apiSecret}
-              onChange={setApiSecret}
-            />
-            <Button.Primary 
-              onClick={handleSignInClick}
-              app
-            >
-              <svg><use xlinkHref={`${IconPath}#Vlt-icon-check`}/></svg>
-              Sign-on
-            </Button.Primary>
+          <Box className="Vlt-card__header">
+            <h3>Vonage Video Analytics Dashboard Template</h3>
           </Box>
-          <Box width="calc(50% - 16px)" ml={2}>
-            <p>Template dashboard showcasing Vonage Video Data Analytics API capabilities</p>
+          <Box
+            className="Vlt-card__content"
+            display="flex"
+          >
+            <Box width="50%">
+              <TextInput
+                label="Project API Key"
+                value={apiKey}
+                onChange={setApiKey}
+              />
+              <TextInput
+                label="Project Secret"
+                type="password"
+                value={apiSecret}
+                onChange={setApiSecret}
+              />
+              <Button.Primary 
+                onClick={handleSignInClick}
+                app
+              >
+                <svg><use xlinkHref={`${IconPath}#Vlt-icon-check`}/></svg>
+                Sign-on
+              </Button.Primary>
+            </Box>
+            <Box width="calc(50% - 16px)" ml={2}>
+              <p>Template dashboard showcasing Vonage Video Data Analytics API capabilities</p>
+            </Box>
           </Box>
         </Box>
-      </Box>
+      </div>
     </Page>
   )
 }
