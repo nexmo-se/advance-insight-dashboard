@@ -199,6 +199,8 @@ UsageTimelineInterface) {
     return (
       <div id="chart">
         <ReactApexChart
+          // Ignoring the typescript for easy debugging
+          // @ts-ignore
           options={chartOptions.options}
           series={chartOptions.series}
           type="rangeBar"
