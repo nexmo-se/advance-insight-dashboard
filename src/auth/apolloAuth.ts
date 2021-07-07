@@ -79,7 +79,9 @@ const authMiddleware = (jwt: any) =>
     return forward(operation);
   });
 
-const cache = new InMemoryCache({});
+const cache = new InMemoryCache({
+  
+});
 
 export const useAppApolloClient = () => {
     const apiKey = sessionStorage.getItem("api_key");

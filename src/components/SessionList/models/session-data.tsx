@@ -29,6 +29,16 @@ class SessionData {
     this.quality = args.quality;
   }
 
+  toCSV () {
+    return {
+      id: this.id,
+      created_at: this.createdAt?.toLocaleString(DateTime.DATETIME_FULL),
+      destroyed_at: this.destroyedAt?.toLocaleString(DateTime.DATETIME_FULL),
+      total_connections: this.connections,
+      published_minutes: this.publishedMinutes,
+      subscribed_minutes: this.subscribedMinutes
+    }
+  }
 }
 
 export default SessionData;

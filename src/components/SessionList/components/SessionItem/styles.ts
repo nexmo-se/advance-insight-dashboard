@@ -11,6 +11,9 @@ export default makeStyles(() => ({
     cursor: "pointer"
   },
   selectedRow: {
-    backgroundColor: "#f3e9ff"
+    backgroundColor: "rgba(183, 121, 255, .5)",
+    "& td": {
+      fontWeight: "bolder"
+    }
   }
 }), { index: 1 });

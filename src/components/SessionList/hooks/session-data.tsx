@@ -4,7 +4,9 @@ import { DateTime } from "luxon";
 import { gql } from "@apollo/client";
 
 import { useState, useEffect } from "react";
-import { useQuery } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
+import { useSession } from "components/SessionProvider";
+import { useSearch } from "components/SearchAndFilter";
 
 
 // Assumption: any session does not have more than 1000 meetings
@@ -37,12 +39,6 @@ const LIST_SESSION_SUMMARY = gql`
   }
 `;
 
-interface SessionDataOptions {
-  apiKey: string;
-  startTime: DateTime;
-  endTime: DateTime;
-}
-
 interface ListSessionSummaryOptions {
   projectId: string;
   startTime: number;
@@ -50,10 +46,12 @@ interface ListSessionSummaryOptions {
   endCursor?: string;
 }
 
-export function useSessionData ({ apiKey, startTime, endTime }: SessionDataOptions) {
+export function useSessionData () {
   const [sessions, setSessions] = useState<SessionData[]>([]);
   const [endCursor, setEndCursor] = useState<string | undefined>();
-  const { loading, error, data, fetchMore } = useQuery<any, ListSessionSummaryOptions>(LIST_SESSION_SUMMARY, {
+  const { apiKey } = useSession();
+  const { startTime, endTime } = useSearch();
+  const [fetchData, { loading, error, data, refetch }] = useLazyQuery<any, ListSessionSummaryOptions>(LIST_SESSION_SUMMARY, {
     variables: {
       projectId: apiKey,
       startTime: startTime.toMillis(),
@@ -61,59 +59,92 @@ export function useSessionData ({ apiKey, startTime, endTime }: SessionDataOptio
     }
   });
 
+  function loadMore () {
+    if (!refetch) return;
+    if (!endCursor) return;
+    
+    // Since pagination is a bit hard to do
+    // I will use refetch() function with endCursor
+    refetch({
+      projectId: apiKey,
+      startTime: startTime.toMillis(),
+      endTime: endTime.toMillis(),
+      endCursor
+    })
+  }
+
   useEffect(
     () => {
-      if (data) {
-        setEndCursor(data.project.sessionData.sessionSummaries.pageInfo.endCursor);
+      if (!data) return;
 
-        const { resources: sessionSummaries } = data.project.sessionData.sessionSummaries;
-        const sessions = sessionSummaries.map(
-          (sessionSummary: any) => {
-            const createdAt = lodash.min<number>(
-              sessionSummary.meetings.resources.map(
-                (meeting: any) => {
-                  return DateTime.fromISO(meeting.createdAt).toMillis()
-                }
-              )
-            );
+      const endCursor = lodash.get(data, "project.sessionData.sessionSummaries.pageInfo.endCursor");
+      setEndCursor(endCursor);
 
-            const destroyedAt = lodash.max<number>(
-              sessionSummary.meetings.resources.map(
-                (meeting: any) => {
-                  return DateTime.fromISO(meeting.destroyedAt).toMillis()
-                }
-              )
-            )
-
-            const connections = sessionSummary.meetings.resources.map(
+      const sessionSummaries = lodash.get(data, "project.sessionData.sessionSummaries.resources");
+      const sessions = sessionSummaries.map(
+        (sessionSummary: any) => {
+          const createdAt = lodash.min<number>(
+            sessionSummary.meetings.resources.map(
               (meeting: any) => {
-                return meeting.totalConnections;
+                return DateTime.fromISO(meeting.createdAt).toMillis()
               }
-            );
+            )
+          );
 
-            return new SessionData({
-              id: sessionSummary.sessionId,
-              createdAt: createdAt? DateTime.fromMillis(createdAt): undefined,
-              destroyedAt: destroyedAt? DateTime.fromMillis(destroyedAt): undefined,
-              connections: lodash.max(connections) ?? 0,
-              publishedMinutes: sessionSummary.publisherMinutes,
-              subscribedMinutes: sessionSummary.subscriberMinutes,
-              quality: 0
-            })
-          }
-        );
-        setSessions(sessions);
-      }
+          const destroyedAt = lodash.max<number>(
+            sessionSummary.meetings.resources.map(
+              (meeting: any) => {
+                return DateTime.fromISO(meeting.destroyedAt).toMillis()
+              }
+            )
+          )
+
+          const connections = sessionSummary.meetings.resources.map(
+            (meeting: any) => {
+              return meeting.totalConnections;
+            }
+          );
+
+          return new SessionData({
+            id: sessionSummary.sessionId,
+            createdAt: createdAt? DateTime.fromMillis(createdAt): undefined,
+            destroyedAt: destroyedAt? DateTime.fromMillis(destroyedAt): undefined,
+            connections: lodash.max(connections) ?? 0,
+            publishedMinutes: sessionSummary.publisherMinutes,
+            subscribedMinutes: sessionSummary.subscriberMinutes,
+            quality: 0
+          })
+        }
+      );
+      setSessions(
+        (oldData) => {
+          // Just in case I have duplicate data, remove duplicate data
+          // before passing it to sessions
+          const combinedData = [...oldData, ...sessions];
+          return lodash.uniqBy(combinedData, "id");
+        }
+      );
     },
     [data]
   );
 
+  useEffect(
+    () => {
+      if (!apiKey) return;
+      if (!startTime) return;
+      if (!endTime) return;
+
+      fetchData();
+    },
+    [apiKey, startTime, endTime, fetchData]
+  );
+
   return {
+    hasNext: !!endCursor,
     loading,
     error,
     sessions,
-    endCursor,
-    fetchMore
+    loadMore
   }
 }
 
