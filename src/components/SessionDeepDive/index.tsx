@@ -32,6 +32,15 @@ function SessionDeepDive() {
                 <p>Usage Timeline</p>
               </AccordionSummary>
               <AccordionDetails>
+                <UsageTimeline
+                  apiKey={apiKey}
+                  sessionIds={sessionIds}
+                  startTime={startTime}
+                  endTime={endTime}
+                  meetingId={meetingId} 
+                ></UsageTimeline> 
+              </AccordionDetails>
+              {/* <AccordionDetails>
                 {meetingId ? <UsageTimeline
                   apiKey={apiKey}
                   sessionIds={sessionIds}
@@ -39,7 +48,7 @@ function SessionDeepDive() {
                   endTime={endTime}
                   meetingId={meetingId} 
                 ></UsageTimeline> : <p><b>Please select a meeting to display the graph</b></p>} 
-              </AccordionDetails>
+              </AccordionDetails> */}
             </Accordion>
           </Card.Content>
         </Card>

@@ -3,6 +3,37 @@ import { get } from "lodash";
 import ReactApexChart from "react-apexcharts";
 import { DateTime } from "luxon";
 
+const GET_SESSION_SUMMARY_DATA = gql`
+  query GetSessionSummaryData($projectId: Int!, $sessionId: [String]!, $startTime: Date!, $endTime: Date!) {
+    project(projectId: $projectId) {
+      sessionData {
+        sessions(sessionIds: $sessionId) {
+          resources {
+            publisherMinutes
+            subscriberMinutes
+            meetings (start: $startTime, end: $endTime){
+              totalCount
+              resources {
+                createdAt
+                destroyedAt
+                meetingId
+                connections {
+                  resources {
+                    createdAt
+                    destroyedAt
+                    connectionId
+                    guid
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
 const GET_USAGE_TIMELINE_DATA = gql`
   query getUsageTimeline(
     $projectId: Int!
@@ -73,7 +104,9 @@ function UsageTimeline({
   meetingId
 }: 
 UsageTimelineInterface) {
-  const { loading, data, error } = useQuery(GET_USAGE_TIMELINE_DATA, {
+
+  const queryToRun = meetingId?  GET_USAGE_TIMELINE_DATA : GET_SESSION_SUMMARY_DATA;
+  const { loading, data, error } = useQuery(queryToRun, {
     variables: {
       projectId: apiKey,
       sessionId: sessionIds,
@@ -164,7 +197,7 @@ UsageTimelineInterface) {
             },
             x: {
                 formatter: function(value: any, series: any) {
-                  if (isNaN(value)) {
+                  if (isNaN(value) || typeof value === 'string' || value instanceof String) {
                     return '';
                   }
                   return DateTime.fromMillis(value).toLocaleString(DateTime.TIME_SIMPLE)
