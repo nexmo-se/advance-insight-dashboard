@@ -87,22 +87,8 @@ function SessionList() {
         </Card.Content>
         <Card.Footer noborder>
           <Box
-            display="flex"
-            justifyContent="space-between"
+            textAlign="right"
           >
-            <Box
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-              className={mStyles.clickableText}
-            >
-              <span>
-                Download Usage Data &nbsp;
-              </span>
-              <svg className="Vlt-icon Vlt-icon--small">
-                <use xlinkHref={`${IconPath}#Vlt-icon-download`} />
-              </svg>
-            </Box>
             <p>Powered by Advanced Insights</p>
           </Box>
         </Card.Footer>
