@@ -119,7 +119,8 @@ export function SessionSummaryQuery({ apiKey, sessionIds, startTime,
               <MeetingDropdown meetings={dropdownMeetings} />
             </Box>
 
-            <button className="Vlt-btn Vlt-btn--primary Vlt-btn--app Vlt-btn--outline">
+            <button onClick={()=> window.open(`https://tokbox.com/developer/tools/inspector/account/admin/project/46423292/session/${sessionIds[0]}`, "_blank")}
+            className="Vlt-btn Vlt-btn--primary Vlt-btn--app Vlt-btn--outline">
               View Inspector
             </button>
           </Box>
