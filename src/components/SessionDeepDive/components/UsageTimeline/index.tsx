@@ -3,7 +3,7 @@ import { get } from "lodash";
 import ReactApexChart from "react-apexcharts";
 import { DateTime } from "luxon";
 
-const GET_USAGE_TIMELINE_DATA = gql`
+const GET_USAGE_TIMELINE_DATA_BY_MEETING = gql`
   query getUsageTimeline(
     $projectId: Int!
     $sessionId: [String]!
@@ -37,6 +37,41 @@ const GET_USAGE_TIMELINE_DATA = gql`
     }
   }
 `;
+
+const GET_USAGE_TIMELINE_DATA = gql`
+  query getUsageTimeline(
+    $projectId: Int!
+    $sessionId: [String]!
+    $startTime: Date!
+    $endTime: Date!
+  ) {
+    project(projectId: $projectId) {
+      sessionData {
+        sessions(sessionIds: $sessionId) {
+          resources {
+            meetings(start: $startTime, end: $endTime) {
+              totalCount
+              resources {
+                createdAt
+                destroyedAt
+                meetingId
+                connections {
+                  resources {
+                    createdAt
+                    destroyedAt
+                    connectionId
+                    guid
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
 
 function queryError() {
     return (
@@ -73,15 +108,13 @@ function UsageTimeline({
   meetingId
 }: 
 UsageTimelineInterface) {
-  const { loading, data, error } = useQuery(GET_USAGE_TIMELINE_DATA, {
-    variables: {
-      projectId: apiKey,
-      sessionId: sessionIds,
-      startTime,
-      endTime,
-      meetingId,
-    },
-  });
+  let queryToUse = GET_USAGE_TIMELINE_DATA;
+  if (meetingId) {
+      queryToUse = GET_USAGE_TIMELINE_DATA_BY_MEETING
+  }
+  const { loading, data, error } = useQuery(queryToUse, {
+      variables: { projectId: apiKey, sessionId: sessionIds, startTime, endTime, meetingId },
+    });
 
   if (loading) {
     return (<div>
