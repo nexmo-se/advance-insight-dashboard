@@ -10,7 +10,7 @@ export const generateJwt = (apiKey: string | null, apiSecret: string| null) : {a
 
     if (apiKey && apiSecret) {
       const currentTime = DateTime.utc().toMillis() / 1000;
-      const expires = parseInt((currentTime + 3).toFixed(0)); // 3 minutes expirity
+      const expires = parseInt((currentTime + 180).toFixed(0)); // 3 minutes expirity
       const accountJwt = generateToken(apiKey, apiSecret, "account", expires);
       const projectJwt = generateToken(apiKey, apiSecret, "project", expires);
       return {
