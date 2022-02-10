@@ -1,7 +1,6 @@
 import {ApolloClient, InMemoryCache, ApolloLink, HttpLink} from "@apollo/client";
-import { generateJwt } from "./authToken";
+import { generateJwt, verifyJwt } from "./authToken";
 import { onError } from "@apollo/client/link/error";
-
 const ERROR_NO_AUTH_PROVIDED = 1001;
 
 const onErrorLink = onError(({ graphQLErrors, networkError, operation, forward }) => {
@@ -26,7 +25,6 @@ const onErrorLink = onError(({ graphQLErrors, networkError, operation, forward }
                         },
                       });
                   }
-                  
                   // retry the request, returning the new observable
                   return forward(operation); */
               }
@@ -42,6 +40,7 @@ const onErrorLink = onError(({ graphQLErrors, networkError, operation, forward }
         const apiKey = sessionStorage.getItem("api_key");
         const apiSecret = sessionStorage.getItem("api_secret");
         const credentials = generateJwt(apiKey, apiSecret);
+
         if (credentials && credentials.project) {
           operation.setContext({
               headers: {
@@ -50,14 +49,13 @@ const onErrorLink = onError(({ graphQLErrors, networkError, operation, forward }
               },
             });
         }
-        
-        // retry the request, returning the new observable
-        return forward(operation);
       }
       // if you would also like to retry automatically on
       // network errors, we recommend that you use
       // apollo-link-retry
     }
+    return forward(operation);
+
   }
 );
 
@@ -68,14 +66,28 @@ const httpLink = new HttpLink({
 const authMiddleware = (jwt: any) =>
   new ApolloLink((operation: any, forward: any) => {
     // add the authorization to the headers
-    if (jwt) {
+    const apiKey = sessionStorage.getItem("api_key");
+    const apiSecret = sessionStorage.getItem("api_secret");
+    const oldHeaders =  operation.getContext().headers;
+    const expired = oldHeaders? verifyJwt(oldHeaders, apiSecret) : jwt? verifyJwt(jwt.project, apiSecret) : false;
+    if (jwt && !expired){
       operation.setContext({
         headers: {
             "X-OPENTOK-AUTH": jwt.project,
         },
       });
     }
-
+    else {
+      const credentials = generateJwt(apiKey, apiSecret);
+      if (credentials) {
+          operation.setContext({
+            headers: {
+                "X-OPENTOK-AUTH": credentials.project,
+            },
+          });
+          jwt = credentials;
+        }
+      }
     return forward(operation);
   });
 

@@ -12,15 +12,15 @@ interface MeetingDropdownProps {
 
 function MeetingDropdown ({ meetings }: MeetingDropdownProps) {
   const [selectedMeeting, setSelectedMeeting] = useState<DropdownItem>({
-    value: "view-all-meeting",
-    label: "View All Meeting"
+    value: "view-all-meetings",
+    label: "View All Meetings"
   });
 
   const { setMeetingId } = useSearch();
 
   useEffect(
     () => {
-      if (selectedMeeting.value === "view-all-meeting") {
+      if (selectedMeeting.value === "view-all-meetings") {
         setMeetingId(undefined);
       } else {
         setMeetingId(selectedMeeting.value);

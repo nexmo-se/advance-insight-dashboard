@@ -13,11 +13,14 @@ import Card from "components/Card";
 import Button from "components/Button";
 import DatePicker from "react-datepicker";
 import { Box } from "@material-ui/core";
+import { Portal } from "react-overlays";
 
 interface ISearchCard {
   onSaveClick: (args: SaveClickEvent) => void;
 }
-
+interface ICalendar {
+  children: any;
+}
 function SearchCard({ onSaveClick }: ISearchCard) {
   const [saving, setSaving] = useState<boolean>(false);
   const [sessionIds, setSessionIds] = useState<string[]>([]);
@@ -26,8 +29,13 @@ function SearchCard({ onSaveClick }: ISearchCard) {
   
   // The sessionIds in the `useState` is not linked directly inside the Hooks
   // We need to update it manually here once the sessionIds change
-  const { sessionIds: selectedSessionIds } = useSearch();
 
+  const { sessionIds: selectedSessionIds } = useSearch();
+  const CalendarContainer = ({ children }: ICalendar) => {
+    const el = document.getElementById("calendar-portal");
+
+    return <Portal container={el}>{children}</Portal>;
+  };
   function handleSessionIdsChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
     const values = e.target.value.split(",");
     setSessionIds(values);
@@ -101,6 +109,7 @@ function SearchCard({ onSaveClick }: ISearchCard) {
                 portalId="date-picker-portal"
                 selectsStart
                 closeOnScroll
+                popperContainer={CalendarContainer}
               />
               <DatePicker
                 dateFormat="dd/MM/yyyy"
@@ -113,6 +122,7 @@ function SearchCard({ onSaveClick }: ISearchCard) {
                 portalId="date-picker-portal"
                 selectsEnd
                 closeOnScroll
+                popperContainer={CalendarContainer}
               />
             </Box>
           </Box>
