@@ -22,6 +22,7 @@
     "apexcharts": "^3.25.0",
     "fetch": "^1.1.0",
     "graphql": "^15.5.0",
+    "http-server": "^14.1.0",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.20",
     "luxon": "^1.26.0",

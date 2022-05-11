@@ -8,6 +8,10 @@
     "REACT_APP_VONAGE_VIDEO_API_INSIGHTS_URL": {
       "description": "Advanced Insights API URL",
       "value": "https://insights.opentok.com/graphql?defaultQuery="
+    },
+    "WEB_CONCURRENCY": {
+      "description": "The number of processes to run.",
+       "value": "5"
     }
   }
 }
