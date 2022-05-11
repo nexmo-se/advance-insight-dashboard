@@ -3,5 +3,11 @@
   "description": "A template app using Vonage Video Advanced Insights API",
   "repository": "https://github.com/nexmo-se/advance-insight-dashboard",
   "logo": "https://tokbox.com/account/img/favicon.ico",
-  "keywords": ["Vonage", "tokbox", "opentok"]
+  "keywords": ["Vonage", "tokbox", "opentok"],
+  "env": {
+    "REACT_APP_VONAGE_VIDEO_API_INSIGHTS_URL": {
+      "description": "Advanced Insights API URL",
+      "value": "https://insights.opentok.com/graphql?defaultQuery="
+    }
+  }
 }
