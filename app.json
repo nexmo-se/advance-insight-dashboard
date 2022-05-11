@@ -1,0 +1,7 @@
+{
+  "name": "advance-insight-dashboard",
+  "description": "A template app using Vonage Video Advanced Insights API",
+  "repository": "https://github.com/nexmo-se/advance-insight-dashboard",
+  "logo": "https://tokbox.com/account/img/favicon.ico",
+  "keywords": ["Vonage", "tokbox", "opentok"]
+}
