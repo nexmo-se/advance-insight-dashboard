@@ -5,7 +5,7 @@ import { DateTime } from "luxon";
 
 const GET_USAGE_TIMELINE_DATA_BY_MEETING = gql`
   query getUsageTimeline(
-    $projectId: Int!
+    $projectId: IntOrString!
     $sessionId: [String]!
     $startTime: Date!
     $endTime: Date!
@@ -40,7 +40,7 @@ const GET_USAGE_TIMELINE_DATA_BY_MEETING = gql`
 
 const GET_USAGE_TIMELINE_DATA = gql`
   query getUsageTimeline(
-    $projectId: Int!
+    $projectId: IntOrString!
     $sessionId: [String]!
     $startTime: Date!
     $endTime: Date!

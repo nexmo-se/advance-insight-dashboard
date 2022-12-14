@@ -9,7 +9,7 @@ import TotalData from "../TotalData";
 import QuickQualityView from "../QuickQualityView";
 
 const GET_SESSION_SUMMARY_DATA = gql`
-  query GetSessionSummaryData($projectId: Int!, $sessionId: [String]!, $startTime: Date!, $endTime: Date!) {
+  query GetSessionSummaryData($projectId: IntOrString!, $sessionId: [String]!, $startTime: Date!, $endTime: Date!) {
     project(projectId: $projectId) {
       sessionData {
         sessions(sessionIds: $sessionId) {
@@ -43,7 +43,7 @@ const GET_SESSION_SUMMARY_DATA = gql`
 `;
 
 const GET_SESSION_SUMMARY_DATA_BY_MEETING = gql`
-  query GetSessionSummaryData($projectId: Int!, $sessionId: [String]!, $startTime: Date!, $endTime: Date!, $meetingId: String!) {
+  query GetSessionSummaryData($projectId: IntOrString!, $sessionId: [String]!, $startTime: Date!, $endTime: Date!, $meetingId: String!) {
     project(projectId: $projectId) {
       sessionData {
         sessions(sessionIds: $sessionId) {

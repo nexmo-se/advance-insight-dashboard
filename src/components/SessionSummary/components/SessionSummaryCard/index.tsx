@@ -12,7 +12,7 @@ import { useSearch } from "components/SearchAndFilter";
 // query getSessionSummaryData($projectId: String!, $sessionId: String! )
 
 const GET_SESSION_SUMMARY_DATA = gql`
-  query GetSessionSummaryData($projectId: Int!, $sessionId: [String]!, $startTime: Date!, $endTime: Date!) {
+  query GetSessionSummaryData($projectId: IntOrString!, $sessionId: [String]!, $startTime: Date!, $endTime: Date!) {
     project(projectId: $projectId) {
       sessionData {
         sessions(sessionIds: $sessionId) {

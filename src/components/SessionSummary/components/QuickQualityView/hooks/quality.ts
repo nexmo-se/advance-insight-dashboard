@@ -15,7 +15,7 @@ import { useSearch } from "components/SearchAndFilter";
 // We assume that there are no more than 1000 subscribers
 // and there are no more than 10000 streamStatsCollection
 const QUALITY_QUERY = gql`
-  query RetrieveStreamStats ($projectId: Int!, $sessionIds: [String]!, $meetingId: String) {
+  query RetrieveStreamStats ($projectId: IntOrString!, $sessionIds: [String]!, $meetingId: String) {
     project(projectId: $projectId) {
       sessionData {
         sessions(sessionIds: $sessionIds) {

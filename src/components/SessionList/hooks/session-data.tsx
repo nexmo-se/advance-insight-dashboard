@@ -10,7 +10,7 @@ import { useQuery } from "@apollo/client";
 // Assumption: any session does not have more than 1000 meetings
 // The first load will be 10 sessions
 const LIST_SESSION_SUMMARY = gql`
-  query ListSessionIds($projectId: Int!, $startTime: Date!, $endTime: Date!, $endCursor: String) {
+  query ListSessionIds($projectId: IntOrString!, $startTime: Date!, $endTime: Date!, $endCursor: String) {
     project(projectId: $projectId) {
       sessionData {
         sessionSummaries(start: $startTime, end: $endTime, endCursor: $endCursor, first: 10) {
